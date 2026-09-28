@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-sans: "Sora", ui-sans-serif, system-ui, sans-serif;
+
+  --color-bg: #0f0d14;
+  --color-surface: #17141e;
+  --color-surface-2: #1f1b28;
+  --color-raised: #262130;
+  --color-ink: #f6f3ee;
+  --color-ink-dim: #c9c4d6;
+  --color-muted: #8d879c;
+  --color-line: rgba(255, 255, 255, 0.09);
+  --color-accent: #ff5b3c;
+  --color-accent-2: #ffe0ab;
+  --color-accent-tint: rgba(255, 91, 60, 0.14);
+  --color-lime: #c8ff4d;
+  --color-lime-tint: rgba(200, 255, 77, 0.14);
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-ring: pulse-ring 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-shimmer: shimmer 2.4s linear infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+  @keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 0 var(--color-accent-tint); }
+    70% { box-shadow: 0 0 0 12px rgba(255, 91, 60, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 91, 60, 0); }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+}
+
+:root[data-theme="light"] {
+  --color-bg: #faf7f1;
+  --color-surface: #ffffff;
+  --color-surface-2: #f3efe6;
+  --color-raised: #ffffff;
+  --color-ink: #16131a;
+  --color-ink-dim: #4a4553;
+  --color-muted: #8a8279;
+  --color-line: rgba(22, 19, 26, 0.09);
+  --color-accent-2: #b4442e;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  overscroll-behavior-y: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#root {
+  max-width: 30rem;
+  margin: 0 auto;
+  min-height: 100dvh;
+  position: relative;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+* {
+  scrollbar-width: none;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
