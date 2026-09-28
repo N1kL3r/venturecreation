@@ -5,7 +5,7 @@ export function Header({ onProfile }: { onProfile: () => void }) {
     <header className="flex items-center justify-between px-5 pb-4 pt-[max(1.25rem,env(safe-area-inset-top))]">
       <div>
         <h1 className="font-display text-[28px] italic leading-none text-[var(--color-ink)]">
-          Loopa
+          Lizly
         </h1>
         <p className="mt-1 flex items-center gap-1 text-[12px] text-[var(--color-muted)]">
           <Icon name="MapPin" size={12} />

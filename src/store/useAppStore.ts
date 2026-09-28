@@ -5,7 +5,7 @@ import type { LinkState } from "../types";
 
 function makeCode(linkId: string) {
   const rand = Math.random().toString(36).slice(2, 6).toUpperCase();
-  return `LOOPA-${linkId.slice(5, 9).toUpperCase()}-${rand}`;
+  return `LIZLY-${linkId.slice(5, 9).toUpperCase()}-${rand}`;
 }
 
 const seedState: Record<string, LinkState> = {
@@ -16,7 +16,7 @@ const seedState: Record<string, LinkState> = {
   "link-wool-brew": {
     current: 3,
     status: "redeemed",
-    code: "LOOPA-BREW-9K2L",
+    code: "LIZLY-BREW-9K2L",
     redeemedAt: Date.now() - 1000 * 60 * 60 * 24 * 3,
   },
   "link-bloom-vinyl": { current: 2, status: "progress" },
@@ -26,7 +26,7 @@ const seedState: Record<string, LinkState> = {
   "link-yoga-gronn": {
     current: 6,
     status: "redeemed",
-    code: "LOOPA-GRON-4F7Q",
+    code: "LIZLY-GRON-4F7Q",
     redeemedAt: Date.now() - 1000 * 60 * 60 * 24 * 9,
   },
   "link-gronn-massasje": { current: 120, status: "progress" },
@@ -132,8 +132,8 @@ export const useAppStore = create<AppState>()(
       },
     }),
     {
-      name: "loopa-storage",
-      version: 2,
+      name: "lizly-storage",
+      version: 3,
       partialize: (s) => ({
         theme: s.theme,
         onboarded: s.onboarded,

@@ -92,7 +92,7 @@ export function ProfileDrawer({ open, onClose }: { open: boolean; onClose: () =>
             </button>
 
             <div className="mt-auto rounded-2xl bg-[var(--color-surface-2)] p-4 text-[12px] leading-relaxed text-[var(--color-muted)]">
-              <p className="mb-1 font-semibold text-[var(--color-ink-dim)]">How Loopa works</p>
+              <p className="mb-1 font-semibold text-[var(--color-ink-dim)]">How Lizly works</p>
               Every reward you unlock is redeemed at a different business than where you
               earned it — so loyalty flows between shops instead of sitting in one.
             </div>

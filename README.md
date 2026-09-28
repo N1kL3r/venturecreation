@@ -1,8 +1,8 @@
-# Loopa
+# Lizly
 
 **Earn here. Unlock there.**
 
-Loopa is a click-around prototype of a shared loyalty passport for neighborhood
+Lizly is a click-around prototype of a shared loyalty passport for neighborhood
 businesses. There's no backend — every bit of state (progress, unlocked
 rewards, redeemed codes, theme, onboarding) lives in `localStorage` via
 Zustand, so the whole app is fully interactive and persists between reloads
@@ -12,7 +12,7 @@ without a database.
 
 Progress earned at one partner unlocks a reward redeemed at a **different**
 partner — never the same shop. Chains of these earn → unlock links form
-closed loops. Loopa ships with three:
+closed loops. Lizly ships with three:
 
 - **The Grind Loop** (5 partners) — coffee → sauna → HIIT → food → boutique → back to coffee
 - **The Style Loop** (4 partners) — florist → record shop → barber → bookshop → back to florist
