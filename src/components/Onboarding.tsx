@@ -59,7 +59,7 @@ export function Onboarding() {
               <div className="glass glass-sheen animate-float mb-8 flex h-24 w-24 items-center justify-center rounded-[28px] bg-[var(--color-accent-tint)] text-[var(--color-accent)]">
                 <Icon name={slide.icon} size={40} />
               </div>
-              <h2 className="font-display text-[30px] italic leading-tight text-[var(--color-ink)]">
+              <h2 className="font-display text-[30px] font-bold leading-tight tracking-[-0.02em] text-[var(--color-ink)]">
                 {slide.title}
               </h2>
               <p className="mt-4 max-w-xs text-[15px] leading-relaxed text-[var(--color-muted)]">

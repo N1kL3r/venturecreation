@@ -17,7 +17,9 @@ export function WalletPage() {
   return (
     <div className="flex-1 pb-28">
       <div className="px-5 pb-5">
-        <h1 className="font-display text-[26px] italic text-[var(--color-ink)]">Wallet</h1>
+        <h1 className="font-display text-[26px] font-bold tracking-[-0.02em] text-[var(--color-ink)]">
+          Wallet
+        </h1>
         <p className="text-[13px] text-[var(--color-muted)]">
           Every reward you're earning across the neighborhood
         </p>

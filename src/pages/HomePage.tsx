@@ -26,7 +26,9 @@ export function HomePage() {
       <LoopSelector />
 
       <div className="mt-2 px-5">
-        <p className="font-display text-[19px] italic text-[var(--color-ink)]">{loop.name}</p>
+        <p className="font-display text-[19px] font-semibold tracking-[-0.01em] text-[var(--color-ink)]">
+          {loop.name}
+        </p>
         <p className="text-[13px] text-[var(--color-muted)]">{loop.tagline}</p>
       </div>
 

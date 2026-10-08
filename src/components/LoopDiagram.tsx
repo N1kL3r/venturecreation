@@ -84,7 +84,7 @@ export function LoopDiagram({
 
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="glass glass-sheen flex h-28 w-28 flex-col items-center justify-center rounded-full text-center">
-          <span className="font-display text-2xl italic text-[var(--color-ink)]">
+          <span className="font-display text-2xl font-bold tracking-[-0.02em] text-[var(--color-ink)]">
             {closed}/{n}
           </span>
           <span className="mt-1 text-[10px] uppercase tracking-[0.14em] text-[var(--color-muted)]">

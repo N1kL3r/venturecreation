@@ -28,7 +28,9 @@ export function PartnersPage() {
   return (
     <div className="flex-1 pb-28">
       <div className="px-5 pb-4">
-        <h1 className="font-display text-[26px] italic text-[var(--color-ink)]">Partners</h1>
+        <h1 className="font-display text-[26px] font-bold tracking-[-0.02em] text-[var(--color-ink)]">
+          Partners
+        </h1>
         <p className="text-[13px] text-[var(--color-muted)]">
           {partners.length} businesses across 3 loops in Grünerløkka
         </p>
