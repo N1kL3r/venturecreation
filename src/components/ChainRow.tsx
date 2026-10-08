@@ -32,27 +32,31 @@ export function ChainRow({
       transition={{ type: "spring", stiffness: 500, damping: 30 }}
       className="glass glass-sheen mb-3 flex w-full flex-col gap-3 rounded-[28px] p-4 text-left"
     >
-      <div className="flex items-center gap-3">
+      <div className="flex items-start gap-3">
         <IconTile name={from.icon} tone={statusTone === "ink" ? "ink" : statusTone} />
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 pt-0.5">
           <p className="truncate text-[15px] font-medium text-[var(--color-ink)]">
             {from.name}
           </p>
           <p className="truncate text-[13px] text-[var(--color-muted)]">{link.earnLabel}</p>
         </div>
-        <ProgressIndicator current={state.current} goal={link.goal} unit={link.unit} />
+        <div className="self-center">
+          <ProgressIndicator current={state.current} goal={link.goal} unit={link.unit} />
+        </div>
       </div>
 
-      <div className="flex items-center gap-3 pl-[18px]">
+      <div className="flex items-start gap-3 pl-[18px]">
         <div className="flex h-full w-9 shrink-0 justify-center">
           <div className="h-6 w-px border-l border-dashed border-[var(--color-accent)] opacity-60" />
         </div>
-        <div className="flex items-center gap-1.5 text-[13px]">
-          <Icon name="CornerDownRight" size={14} className="text-[var(--color-accent)]" />
-          <span className="font-semibold text-[var(--color-accent)]">
-            Unlocks {link.rewardText}
+        <div className="flex items-start gap-1.5 pt-0.5 text-[13px]">
+          <Icon name="CornerDownRight" size={14} className="mt-0.5 shrink-0 text-[var(--color-accent)]" />
+          <span>
+            <span className="font-semibold text-[var(--color-accent)]">
+              Unlocks {link.rewardText}
+            </span>{" "}
+            <span className="text-[var(--color-muted)]">at</span>
           </span>
-          <span className="text-[var(--color-muted)]">at</span>
         </div>
       </div>
 

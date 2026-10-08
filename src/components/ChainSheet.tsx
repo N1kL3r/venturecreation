@@ -68,9 +68,9 @@ export function ChainSheet({
       <div className="relative px-5 pt-2">
         {showConfetti && <Confetti />}
 
-        <div className="flex items-center gap-3 border-b border-[var(--color-line)] pb-5">
+        <div className="flex items-start gap-3 border-b border-[var(--color-line)] pb-5">
           <IconTile name={from.icon} tone="ink" size="lg" />
-          <div className="min-w-0 flex-1">
+          <div className="min-w-0 flex-1 pt-1">
             <p className="text-[17px] font-semibold text-[var(--color-ink)]">{from.name}</p>
             <p className="text-[13px] text-[var(--color-muted)]">{link.earnLabel}</p>
           </div>
@@ -103,20 +103,20 @@ export function ChainSheet({
           )}
         </div>
 
-        <div className="glass-tint flex items-center gap-2 rounded-2xl bg-[var(--color-accent-tint)] px-4 py-3">
-          <Icon name="CornerDownRight" size={16} className="text-[var(--color-accent)]" />
+        <div className="glass-tint flex items-start gap-2 rounded-2xl bg-[var(--color-accent-tint)] px-4 py-3">
+          <Icon name="CornerDownRight" size={16} className="mt-0.5 shrink-0 text-[var(--color-accent)]" />
           <p className="text-[13px] font-semibold text-[var(--color-accent)]">
             Unlocks {link.rewardText} at {to.name}
           </p>
         </div>
 
-        <div className="glass glass-sheen mt-4 flex items-center gap-3 rounded-[22px] px-4 py-4">
+        <div className="glass glass-sheen mt-4 flex items-start gap-3 rounded-[22px] px-4 py-4">
           <IconTile name={to.icon} tone="accent" />
-          <div className="min-w-0 flex-1">
+          <div className="min-w-0 flex-1 pt-0.5">
             <p className="text-[15px] font-semibold text-[var(--color-ink)]">{to.name}</p>
             <p className="truncate text-[13px] text-[var(--color-muted)]">{to.address}</p>
           </div>
-          <div className="flex shrink-0 items-center gap-1 text-xs text-[var(--color-muted)]">
+          <div className="flex shrink-0 items-center gap-1 self-center text-xs text-[var(--color-muted)]">
             <Icon name="MapPin" size={13} />
             {to.walkTime}
           </div>

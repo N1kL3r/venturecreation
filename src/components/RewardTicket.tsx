@@ -31,7 +31,7 @@ export function RewardTicket({
             : "var(--glass-bg)",
       }}
     >
-      <div className="flex flex-1 items-center gap-3 py-4 pl-4 pr-3">
+      <div className="flex flex-1 items-start gap-3 py-4 pl-4 pr-3">
         <IconTile name={to.icon} tone={isReady ? "accent" : isRedeemed ? "lime" : "ink"} />
         <div className="min-w-0 flex-1">
           <p className="truncate text-[14px] font-semibold text-[var(--color-ink)]">

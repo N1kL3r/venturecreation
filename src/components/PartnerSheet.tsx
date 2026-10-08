@@ -20,9 +20,9 @@ export function PartnerSheet({
     <Sheet open={!!partner} onClose={onClose}>
       {partner && related && (
         <div className="px-5 pt-2">
-          <div className="flex items-center gap-3 border-b border-[var(--color-line)] pb-5">
+          <div className="flex items-start gap-3 border-b border-[var(--color-line)] pb-5">
             <IconTile name={partner.icon} tone="accent" size="lg" />
-            <div className="min-w-0 flex-1">
+            <div className="min-w-0 flex-1 pt-1">
               <p className="text-[18px] font-semibold text-[var(--color-ink)]">{partner.name}</p>
               <p className="text-[13px] text-[var(--color-muted)]">{partner.category}</p>
             </div>
@@ -49,9 +49,9 @@ export function PartnerSheet({
                   <button
                     key={link.id}
                     onClick={() => onOpenLink(link.id)}
-                    className="glass mb-2.5 flex w-full items-center gap-3 rounded-2xl px-4 py-3.5 text-left transition-transform active:scale-[0.98]"
+                    className="glass mb-2.5 flex w-full items-start gap-3 rounded-2xl px-4 py-3.5 text-left transition-transform active:scale-[0.98]"
                   >
-                    <Icon name="Target" size={16} className="text-[var(--color-accent)]" />
+                    <Icon name="Target" size={16} className="mt-1 shrink-0 text-[var(--color-accent)]" />
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-[13px] font-medium text-[var(--color-ink)]">
                         {link.earnLabel}
@@ -60,7 +60,9 @@ export function PartnerSheet({
                         Unlocks {link.rewardText}
                       </p>
                     </div>
-                    <StatusPill status={state?.status} />
+                    <div className="self-center">
+                      <StatusPill status={state?.status} />
+                    </div>
                   </button>
                 );
               })}
@@ -79,9 +81,9 @@ export function PartnerSheet({
                   <button
                     key={link.id}
                     onClick={() => onOpenLink(link.id)}
-                    className="glass mb-2.5 flex w-full items-center gap-3 rounded-2xl px-4 py-3.5 text-left transition-transform active:scale-[0.98]"
+                    className="glass mb-2.5 flex w-full items-start gap-3 rounded-2xl px-4 py-3.5 text-left transition-transform active:scale-[0.98]"
                   >
-                    <Icon name="Gift" size={16} className="text-[var(--color-lime)]" />
+                    <Icon name="Gift" size={16} className="mt-1 shrink-0 text-[var(--color-lime)]" />
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-[13px] font-medium text-[var(--color-ink)]">
                         {link.rewardText}
@@ -90,7 +92,9 @@ export function PartnerSheet({
                         Earned at {from.name}
                       </p>
                     </div>
-                    <StatusPill status={state?.status} />
+                    <div className="self-center">
+                      <StatusPill status={state?.status} />
+                    </div>
                   </button>
                 );
               })}
