@@ -6,6 +6,7 @@ import type { ChainLink, Unit } from "../types";
 import { Confetti } from "./Confetti";
 import { Icon, IconTile } from "./IconTile";
 import { ProgressIndicator, unitLabel } from "./Progress";
+import { ScanOverlay } from "./ScanOverlay";
 import { Sheet } from "./Sheet";
 
 const incrementFor: Record<Unit, number> = {
@@ -17,13 +18,13 @@ const incrementFor: Record<Unit, number> = {
   kr: 50,
 };
 
-const actionLabel: Record<Unit, string> = {
-  stamps: "Log a stamp",
-  visits: "Log this visit",
-  referrals: "Log a referral",
-  purchases: "Log a purchase",
-  classes: "Log this class",
-  kr: "Log 50 kr spent",
+const scanCaption: Record<Unit, string> = {
+  stamps: "logs a stamp",
+  visits: "logs this visit",
+  referrals: "logs a referral",
+  purchases: "logs a purchase",
+  classes: "logs this class",
+  kr: "logs 50 kr spent",
 };
 
 export function ChainSheet({
@@ -38,6 +39,7 @@ export function ChainSheet({
   const reveal = useAppStore((s) => s.reveal);
   const redeem = useAppStore((s) => s.redeem);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [scanOpen, setScanOpen] = useState(false);
   const prevStatus = useRef<string | undefined>(undefined);
 
   useEffect(() => {
@@ -60,6 +62,7 @@ export function ChainSheet({
   const isReady = state?.status === "ready";
 
   return (
+    <>
     <Sheet open={!!link} onClose={onClose}>
       {link && state && from && to && (
       <div className="relative px-5 pt-2">
@@ -85,12 +88,18 @@ export function ChainSheet({
           <ProgressIndicator current={state.current} goal={link.goal} unit={link.unit} compact />
 
           {state.status === "progress" && (
-            <button
-              onClick={() => simulate(link.id, incrementFor[link.unit])}
-              className="glass-tint mt-4 w-full rounded-2xl py-3 text-sm font-medium text-[var(--color-ink-dim)] transition-transform active:scale-[0.98]"
-            >
-              + {actionLabel[link.unit]}
-            </button>
+            <>
+              <button
+                onClick={() => setScanOpen(true)}
+                className="glass-sheen mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-[var(--color-ink)] py-3.5 text-sm font-semibold text-[var(--color-bg)] transition-transform active:scale-[0.98]"
+              >
+                <Icon name="ScanLine" size={16} />
+                Scan to check in
+              </button>
+              <p className="mt-2 text-center text-[11px] text-[var(--color-muted)]">
+                Scanning the code at {from.name}&rsquo;s counter {scanCaption[link.unit]}
+              </p>
+            </>
           )}
         </div>
 
@@ -179,5 +188,18 @@ export function ChainSheet({
       </div>
       )}
     </Sheet>
+    {link && from && (
+      <ScanOverlay
+        open={scanOpen}
+        partnerName={from.name}
+        partnerId={from.id}
+        onDetected={() => {
+          simulate(link.id, incrementFor[link.unit]);
+          setScanOpen(false);
+        }}
+        onClose={() => setScanOpen(false)}
+      />
+    )}
+    </>
   );
 }
