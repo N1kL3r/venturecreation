@@ -1,4 +1,4 @@
-import type { ChainLink, Loop, Partner } from "../types";
+import type { ChainLink, Loop, Partner, Unit } from "../types";
 
 export const partners: Partner[] = [
   {
@@ -307,3 +307,29 @@ export const partnerLinks = (partnerId: string) => ({
   earns: links.filter((l) => l.fromId === partnerId),
   redeems: links.filter((l) => l.toId === partnerId),
 });
+
+export const unitMeta: Record<Unit, { label: string; step: number; min: number }> = {
+  stamps: { label: "stamps", step: 1, min: 1 },
+  visits: { label: "visits", step: 1, min: 1 },
+  referrals: { label: "referrals", step: 1, min: 1 },
+  purchases: { label: "purchases", step: 1, min: 1 },
+  classes: { label: "classes", step: 1, min: 1 },
+  kr: { label: "kr spent", step: 50, min: 50 },
+};
+
+export function earnLabelFor(unit: Unit, goal: number): string {
+  switch (unit) {
+    case "stamps":
+      return `Collect ${goal} stamp${goal === 1 ? "" : "s"}`;
+    case "visits":
+      return `${goal} visit${goal === 1 ? "" : "s"}`;
+    case "referrals":
+      return `Refer ${goal} friend${goal === 1 ? "" : "s"}`;
+    case "purchases":
+      return `Make ${goal} purchase${goal === 1 ? "" : "s"}`;
+    case "classes":
+      return `Attend ${goal} class${goal === 1 ? "" : "es"}`;
+    case "kr":
+      return `Spend ${goal} kr`;
+  }
+}

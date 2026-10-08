@@ -1,4 +1,5 @@
-import { partnerById, partnerLinks } from "../data/partners";
+import { partnerById } from "../data/partners";
+import { useLoopData } from "../hooks/useLoopData";
 import { useAppStore } from "../store/useAppStore";
 import { Icon, IconTile } from "./IconTile";
 import { Sheet } from "./Sheet";
@@ -13,6 +14,7 @@ export function PartnerSheet({
   onOpenLink: (linkId: string) => void;
 }) {
   const linkStates = useAppStore((s) => s.linkStates);
+  const { partnerLinks } = useLoopData();
   const partner = partnerId ? partnerById(partnerId) : null;
   const related = partnerId ? partnerLinks(partnerId) : null;
 

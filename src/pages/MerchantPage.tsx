@@ -2,7 +2,8 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { partnerById, partners } from "../data/partners";
 import { Icon, IconTile } from "../components/IconTile";
-import { allLinks, useAppStore } from "../store/useAppStore";
+import { useLoopData } from "../hooks/useLoopData";
+import { useAppStore } from "../store/useAppStore";
 
 type Feedback =
   | { kind: "success"; rewardText: string; fromName: string; toName: string }
@@ -14,6 +15,7 @@ export function MerchantPage() {
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const redeemByCode = useAppStore((s) => s.redeemByCode);
   const linkStates = useAppStore((s) => s.linkStates);
+  const { allLinks } = useLoopData();
 
   const partner = partnerById(partnerId);
 

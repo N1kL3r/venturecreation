@@ -1,4 +1,5 @@
-import { linksForLoop, partnerById } from "../data/partners";
+import { partnerById } from "../data/partners";
+import { useLoopData } from "../hooks/useLoopData";
 import { useAppStore } from "../store/useAppStore";
 import { Icon } from "./IconTile";
 
@@ -27,6 +28,7 @@ export function LoopDiagram({
   onSelectLink: (linkId: string) => void;
 }) {
   const linkStates = useAppStore((s) => s.linkStates);
+  const { linksForLoop } = useLoopData();
   const chainLinks = linksForLoop(loopId);
   const n = chainLinks.length;
   const angleFor = (i: number) => -90 + i * (360 / n);

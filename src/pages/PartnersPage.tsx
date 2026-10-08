@@ -3,7 +3,8 @@ import { useMemo, useState } from "react";
 import { ChainSheet } from "../components/ChainSheet";
 import { Icon, IconTile } from "../components/IconTile";
 import { PartnerSheet } from "../components/PartnerSheet";
-import { linkById, partnerLinks, partners } from "../data/partners";
+import { partners } from "../data/partners";
+import { useLoopData } from "../hooks/useLoopData";
 import { useAppStore } from "../store/useAppStore";
 
 const categories = ["All", ...Array.from(new Set(partners.map((p) => p.category)))];
@@ -14,6 +15,7 @@ export function PartnersPage() {
   const [partnerId, setPartnerId] = useState<string | null>(null);
   const [linkId, setLinkId] = useState<string | null>(null);
   const linkStates = useAppStore((s) => s.linkStates);
+  const { linkById, partnerLinks, allLoops } = useLoopData();
 
   const filtered = useMemo(() => {
     return partners.filter((p) => {
@@ -32,7 +34,8 @@ export function PartnersPage() {
           Partners
         </h1>
         <p className="text-[13px] text-[var(--color-muted)]">
-          {partners.length} businesses across 3 loops in Grünerløkka
+          {partners.length} businesses across {allLoops.length} loop{allLoops.length === 1 ? "" : "s"} in
+          Grünerløkka
         </p>
       </div>
 

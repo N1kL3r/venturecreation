@@ -4,14 +4,16 @@ import { ChainSheet } from "../components/ChainSheet";
 import { Icon } from "../components/IconTile";
 import { LoopDiagram } from "../components/LoopDiagram";
 import { LoopSelector } from "../components/LoopSelector";
-import { linkById, linksForLoop, loopById } from "../data/partners";
+import { useLoopData } from "../hooks/useLoopData";
 import { useAppStore } from "../store/useAppStore";
 
 export function HomePage() {
   const activeLoopId = useAppStore((s) => s.activeLoopId);
+  const deleteCustomLoop = useAppStore((s) => s.deleteCustomLoop);
   const [openLinkId, setOpenLinkId] = useState<string | null>(null);
+  const { loopById, linkById, linksForLoop } = useLoopData();
   const loop = loopById(activeLoopId);
-  const chainLinks = useMemo(() => linksForLoop(activeLoopId), [activeLoopId]);
+  const chainLinks = useMemo(() => linksForLoop(activeLoopId), [activeLoopId, linksForLoop]);
   const openLink = openLinkId ? linkById(openLinkId) : null;
 
   return (
@@ -25,11 +27,26 @@ export function HomePage() {
 
       <LoopSelector />
 
-      <div className="mt-2 px-5">
-        <p className="font-display text-[19px] font-semibold tracking-[-0.01em] text-[var(--color-ink)]">
-          {loop.name}
-        </p>
-        <p className="text-[13px] text-[var(--color-muted)]">{loop.tagline}</p>
+      <div className="mt-2 flex items-start justify-between px-5">
+        <div>
+          <p className="font-display text-[19px] font-semibold tracking-[-0.01em] text-[var(--color-ink)]">
+            {loop.name}
+          </p>
+          <p className="text-[13px] text-[var(--color-muted)]">{loop.tagline}</p>
+        </div>
+        {loop.isCustom && (
+          <button
+            onClick={() => {
+              if (confirm(`Delete "${loop.name}"? This can't be undone.`)) {
+                deleteCustomLoop(loop.id);
+              }
+            }}
+            className="glass-tint mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[var(--color-muted)]"
+            aria-label="Delete this loop"
+          >
+            <Icon name="Trash2" size={14} />
+          </button>
+        )}
       </div>
 
       <div className="mt-5">

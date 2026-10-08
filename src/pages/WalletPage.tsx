@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { ChainSheet } from "../components/ChainSheet";
 import { RewardTicket } from "../components/RewardTicket";
-import { allLinks } from "../store/useAppStore";
+import { useLoopData } from "../hooks/useLoopData";
 import { useAppStore } from "../store/useAppStore";
-import { linkById } from "../data/partners";
 
 export function WalletPage() {
   const linkStates = useAppStore((s) => s.linkStates);
   const [linkId, setLinkId] = useState<string | null>(null);
+  const { allLinks, linkById } = useLoopData();
   const openLink = linkId ? linkById(linkId) : null;
 
   const ready = allLinks.filter((l) => linkStates[l.id]?.status === "ready");

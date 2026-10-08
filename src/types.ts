@@ -29,6 +29,7 @@ export interface Loop {
   tagline: string;
   accent: string;
   linkIds: string[];
+  isCustom?: boolean;
 }
 
 export type LinkStatus = "progress" | "ready" | "redeemed";

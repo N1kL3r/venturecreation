@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { loops } from "../data/partners";
+import { useLoopData } from "../hooks/useLoopData";
 import { useAppStore } from "../store/useAppStore";
 import { Icon } from "./IconTile";
 
@@ -10,16 +10,17 @@ export function ProfileDrawer({ open, onClose }: { open: boolean; onClose: () =>
   const toggleTheme = useAppStore((s) => s.toggleTheme);
   const resetDemo = useAppStore((s) => s.resetDemo);
   const linkStates = useAppStore((s) => s.linkStates);
+  const { allLoops } = useLoopData();
   const stats = useMemo(() => {
     const all = Object.values(linkStates);
     const redeemed = all.filter((l) => l.status === "redeemed").length;
     const inProgress = all.filter((l) => l.status === "progress").length;
     const totalStamps = all.reduce((sum, l) => sum + l.current, 0);
-    const loopsClosed = loops.filter((loop) =>
+    const loopsClosed = allLoops.filter((loop) =>
       loop.linkIds.every((id) => linkStates[id]?.status === "redeemed")
     ).length;
     return { loopsClosed, redeemed, inProgress, totalStamps };
-  }, [linkStates]);
+  }, [linkStates, allLoops]);
 
   return (
     <AnimatePresence>
