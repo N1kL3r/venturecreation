@@ -2,7 +2,7 @@ import { Icon } from "./IconTile";
 
 export function Header({ onProfile }: { onProfile: () => void }) {
   return (
-    <header className="flex items-center justify-between px-5 pb-4 pt-[max(1.25rem,env(safe-area-inset-top))]">
+    <header className="glass sticky top-0 z-20 flex items-center justify-between rounded-b-[28px] border-t-0 px-5 pb-4 pt-[max(1.25rem,env(safe-area-inset-top))]">
       <div>
         <h1 className="font-display text-[28px] italic leading-none text-[var(--color-ink)]">
           Lizly
@@ -14,7 +14,7 @@ export function Header({ onProfile }: { onProfile: () => void }) {
       </div>
       <button
         onClick={onProfile}
-        className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-surface-2)] text-[var(--color-ink)] transition-transform active:scale-90"
+        className="glass glass-sheen flex h-11 w-11 items-center justify-center rounded-full text-[var(--color-ink)] transition-transform active:scale-90"
         aria-label="Profile"
       >
         <Icon name="User" size={18} />

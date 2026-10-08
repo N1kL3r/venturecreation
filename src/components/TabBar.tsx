@@ -1,4 +1,5 @@
-import { NavLink } from "react-router-dom";
+import { motion } from "framer-motion";
+import { NavLink, useLocation } from "react-router-dom";
 import { Icon } from "./IconTile";
 
 const tabs = [
@@ -8,22 +9,31 @@ const tabs = [
 ];
 
 export function TabBar() {
+  const { pathname } = useLocation();
+  const activeIndex = Math.max(
+    0,
+    tabs.findIndex((t) => (t.to === "/" ? pathname === "/" : pathname.startsWith(t.to)))
+  );
+
   return (
-    <nav className="sticky bottom-0 z-40 mt-auto border-t border-[var(--color-line)] bg-[var(--color-surface)]/90 backdrop-blur-xl">
-      <div className="flex items-stretch justify-around pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2">
-        {tabs.map((tab) => (
+    <nav className="sticky bottom-0 z-40 mt-auto px-5 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3">
+      <div className="glass glass-raised glass-sheen relative flex items-center rounded-full p-1.5">
+        <motion.div
+          className="glass-strong absolute inset-y-1.5 rounded-full"
+          style={{ width: `calc(${100 / tabs.length}% - 6px)` }}
+          animate={{ left: `calc(${(activeIndex / tabs.length) * 100}% + 3px)` }}
+          transition={{ type: "spring", stiffness: 420, damping: 34 }}
+        />
+        {tabs.map((tab, i) => (
           <NavLink
             key={tab.to}
             to={tab.to}
             end={tab.to === "/"}
-            className={({ isActive }) =>
-              `flex flex-1 flex-col items-center gap-1 py-1.5 text-[11px] font-medium transition-colors ${
-                isActive ? "text-[var(--color-accent)]" : "text-[var(--color-muted)]"
-              }`
-            }
+            className="relative z-10 flex flex-1 items-center justify-center gap-1.5 py-2.5 text-[12.5px] font-semibold transition-colors duration-200"
+            style={{ color: i === activeIndex ? "var(--color-ink)" : "var(--color-muted)" }}
           >
-            <Icon name={tab.icon} size={21} />
-            {tab.label}
+            <Icon name={tab.icon} size={18} />
+            <span className="hidden min-[360px]:inline">{tab.label}</span>
           </NavLink>
         ))}
       </div>

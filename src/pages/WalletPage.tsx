@@ -15,7 +15,7 @@ export function WalletPage() {
   const redeemed = allLinks.filter((l) => linkStates[l.id]?.status === "redeemed");
 
   return (
-    <div className="flex-1 pb-6">
+    <div className="flex-1 pb-28">
       <div className="px-5 pb-5">
         <h1 className="font-display text-[26px] italic text-[var(--color-ink)]">Wallet</h1>
         <p className="text-[13px] text-[var(--color-muted)]">

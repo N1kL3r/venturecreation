@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { loops } from "../data/partners";
 import { useAppStore } from "../store/useAppStore";
 
@@ -15,13 +16,20 @@ export function LoopSelector() {
           <button
             key={loop.id}
             onClick={() => setActiveLoop(loop.id)}
-            className={`shrink-0 rounded-full border px-4 py-2 text-left transition-all ${
-              active
-                ? "border-transparent bg-[var(--color-ink)] text-[var(--color-bg)]"
-                : "border-[var(--color-line)] bg-transparent text-[var(--color-ink-dim)]"
+            className={`relative shrink-0 rounded-full border px-4 py-2.5 text-left transition-colors ${
+              active ? "border-transparent" : "border-[var(--color-line)] text-[var(--color-ink-dim)]"
             }`}
           >
-            <div className="flex items-center gap-2">
+            {active && (
+              <motion.div
+                layoutId="loop-pill"
+                className="glass glass-sheen absolute inset-0 rounded-full"
+                transition={{ type: "spring", stiffness: 420, damping: 34 }}
+              />
+            )}
+            <div
+              className={`relative z-10 flex items-center gap-2 ${active ? "text-[var(--color-ink)]" : ""}`}
+            >
               <span
                 className="h-2 w-2 rounded-full"
                 style={{ background: active ? loop.accent : "var(--color-muted)" }}

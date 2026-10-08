@@ -87,21 +87,21 @@ export function ChainSheet({
           {state.status === "progress" && (
             <button
               onClick={() => simulate(link.id, incrementFor[link.unit])}
-              className="mt-4 w-full rounded-2xl border border-dashed border-[var(--color-line)] py-3 text-sm font-medium text-[var(--color-ink-dim)] transition-colors active:bg-[var(--color-surface-2)]"
+              className="glass-tint mt-4 w-full rounded-2xl py-3 text-sm font-medium text-[var(--color-ink-dim)] transition-transform active:scale-[0.98]"
             >
               + {actionLabel[link.unit]}
             </button>
           )}
         </div>
 
-        <div className="flex items-center gap-2 rounded-2xl bg-[var(--color-accent-tint)] px-4 py-3">
+        <div className="glass-tint flex items-center gap-2 rounded-2xl bg-[var(--color-accent-tint)] px-4 py-3">
           <Icon name="CornerDownRight" size={16} className="text-[var(--color-accent)]" />
           <p className="text-[13px] font-semibold text-[var(--color-accent)]">
             Unlocks {link.rewardText} at {to.name}
           </p>
         </div>
 
-        <div className="mt-4 flex items-center gap-3 rounded-2xl border border-[var(--color-line)] px-4 py-4">
+        <div className="glass glass-sheen mt-4 flex items-center gap-3 rounded-[22px] px-4 py-4">
           <IconTile name={to.icon} tone="accent" />
           <div className="min-w-0 flex-1">
             <p className="text-[15px] font-semibold text-[var(--color-ink)]">{to.name}</p>
@@ -115,7 +115,7 @@ export function ChainSheet({
 
         <div className="mt-6">
           {!isReady && !isRedeemed && (
-            <div className="flex items-center justify-center gap-2 rounded-2xl bg-[var(--color-surface-2)] py-4 text-sm text-[var(--color-muted)]">
+            <div className="glass-tint flex items-center justify-center gap-2 rounded-2xl bg-[var(--color-surface-2)]/50 py-4 text-sm text-[var(--color-muted)]">
               <Icon name="Lock" size={15} />
               Reach your goal to unlock the redeem code
             </div>
@@ -124,7 +124,7 @@ export function ChainSheet({
           {isReady && !state.code && (
             <button
               onClick={() => reveal(link.id)}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[var(--color-accent)] py-4 text-[15px] font-semibold text-white shadow-lg shadow-[var(--color-accent-tint)] transition-transform active:scale-[0.98]"
+              className="glass-sheen flex w-full items-center justify-center gap-2 rounded-2xl bg-[var(--color-accent)] py-4 text-[15px] font-semibold text-white shadow-lg shadow-[var(--color-accent-tint)] transition-transform active:scale-[0.98]"
             >
               <Icon name="Sparkles" size={17} />
               Reveal your reward
@@ -132,11 +132,11 @@ export function ChainSheet({
           )}
 
           {isReady && state.code && (
-            <div className="flex flex-col items-center gap-4 rounded-2xl border border-[var(--color-line)] bg-[var(--color-surface-2)] py-6">
+            <div className="glass glass-sheen flex flex-col items-center gap-4 rounded-[26px] py-6">
               <div className="rounded-xl bg-white p-3">
                 <QRCodeSVG value={state.code} size={132} />
               </div>
-              <div className="flex items-center gap-2 rounded-full border border-[var(--color-line)] px-4 py-1.5">
+              <div className="glass-tint flex items-center gap-2 rounded-full px-4 py-1.5">
                 <span className="font-mono text-sm tracking-wider text-[var(--color-ink)]">
                   {state.code}
                 </span>
@@ -146,7 +146,7 @@ export function ChainSheet({
               </p>
               <button
                 onClick={() => redeem(link.id)}
-                className="mx-5 flex items-center gap-2 rounded-2xl bg-[var(--color-ink)] px-6 py-3 text-sm font-semibold text-[var(--color-bg)] transition-transform active:scale-[0.98]"
+                className="glass-sheen mx-5 flex items-center gap-2 rounded-2xl bg-[var(--color-ink)] px-6 py-3 text-sm font-semibold text-[var(--color-bg)] transition-transform active:scale-[0.98]"
               >
                 <Icon name="Check" size={16} />
                 Mark as redeemed
@@ -155,7 +155,7 @@ export function ChainSheet({
           )}
 
           {isRedeemed && (
-            <div className="flex flex-col items-center gap-3 rounded-2xl border border-[var(--color-lime-tint)] bg-[var(--color-lime-tint)] py-6">
+            <div className="glass-tint flex flex-col items-center gap-3 rounded-[26px] bg-[var(--color-lime-tint)] py-6">
               <Icon name="CheckCircle2" size={28} className="text-[var(--color-lime)]" />
               <p className="text-sm font-semibold text-[var(--color-ink)]">Reward redeemed</p>
               {state.redeemedAt && (

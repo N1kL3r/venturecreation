@@ -32,7 +32,7 @@ export function PartnerSheet({
             {partner.blurb}
           </p>
 
-          <div className="flex flex-col gap-2.5 rounded-2xl bg-[var(--color-surface-2)] p-4">
+          <div className="glass flex flex-col gap-2.5 rounded-[22px] p-4">
             <Row icon="MapPin" text={partner.address} />
             <Row icon="Clock" text={partner.hours} />
             <Row icon="Footprints" text={partner.walkTime} />
@@ -49,7 +49,7 @@ export function PartnerSheet({
                   <button
                     key={link.id}
                     onClick={() => onOpenLink(link.id)}
-                    className="flex w-full items-center gap-3 rounded-2xl border border-[var(--color-line)] px-4 py-3.5 text-left transition-colors active:bg-[var(--color-surface-2)]"
+                    className="glass mb-2.5 flex w-full items-center gap-3 rounded-2xl px-4 py-3.5 text-left transition-transform active:scale-[0.98]"
                   >
                     <Icon name="Target" size={16} className="text-[var(--color-accent)]" />
                     <div className="min-w-0 flex-1">
@@ -79,7 +79,7 @@ export function PartnerSheet({
                   <button
                     key={link.id}
                     onClick={() => onOpenLink(link.id)}
-                    className="flex w-full items-center gap-3 rounded-2xl border border-[var(--color-line)] px-4 py-3.5 text-left transition-colors active:bg-[var(--color-surface-2)]"
+                    className="glass mb-2.5 flex w-full items-center gap-3 rounded-2xl px-4 py-3.5 text-left transition-transform active:scale-[0.98]"
                   >
                     <Icon name="Gift" size={16} className="text-[var(--color-lime)]" />
                     <div className="min-w-0 flex-1">
@@ -121,13 +121,13 @@ function Row({ icon, text }: { icon: string; text: string }) {
 function StatusPill({ status }: { status?: string }) {
   if (status === "redeemed")
     return (
-      <span className="shrink-0 rounded-full bg-[var(--color-lime-tint)] px-2 py-0.5 text-[10px] font-medium text-[var(--color-lime)]">
+      <span className="glass-tint shrink-0 rounded-full bg-[var(--color-lime-tint)] px-2 py-0.5 text-[10px] font-medium text-[var(--color-lime)]">
         Done
       </span>
     );
   if (status === "ready")
     return (
-      <span className="shrink-0 rounded-full bg-[var(--color-accent-tint)] px-2 py-0.5 text-[10px] font-medium text-[var(--color-accent)]">
+      <span className="glass-tint shrink-0 rounded-full bg-[var(--color-accent-tint)] px-2 py-0.5 text-[10px] font-medium text-[var(--color-accent)]">
         Ready
       </span>
     );

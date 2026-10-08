@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import { ChainSheet } from "../components/ChainSheet";
 import { Icon, IconTile } from "../components/IconTile";
@@ -25,7 +26,7 @@ export function PartnersPage() {
   const openLink = linkId ? linkById(linkId) : null;
 
   return (
-    <div className="flex-1 pb-6">
+    <div className="flex-1 pb-28">
       <div className="px-5 pb-4">
         <h1 className="font-display text-[26px] italic text-[var(--color-ink)]">Partners</h1>
         <p className="text-[13px] text-[var(--color-muted)]">
@@ -34,7 +35,7 @@ export function PartnersPage() {
       </div>
 
       <div className="px-5">
-        <div className="flex items-center gap-2 rounded-2xl bg-[var(--color-surface-2)] px-4 py-3">
+        <div className="glass flex items-center gap-2 rounded-2xl px-4 py-3">
           <Icon name="Search" size={16} className="text-[var(--color-muted)]" />
           <input
             value={query}
@@ -46,19 +47,27 @@ export function PartnersPage() {
       </div>
 
       <div className="scrollbar-none mt-4 flex gap-2 overflow-x-auto px-5 pb-1">
-        {categories.map((c) => (
-          <button
-            key={c}
-            onClick={() => setCategory(c)}
-            className={`shrink-0 rounded-full border px-3.5 py-1.5 text-[13px] font-medium transition-colors ${
-              category === c
-                ? "border-transparent bg-[var(--color-ink)] text-[var(--color-bg)]"
-                : "border-[var(--color-line)] text-[var(--color-ink-dim)]"
-            }`}
-          >
-            {c}
-          </button>
-        ))}
+        {categories.map((c) => {
+          const active = category === c;
+          return (
+            <button
+              key={c}
+              onClick={() => setCategory(c)}
+              className={`relative shrink-0 rounded-full border px-3.5 py-1.5 text-[13px] font-medium transition-colors ${
+                active ? "border-transparent" : "border-[var(--color-line)] text-[var(--color-ink-dim)]"
+              }`}
+            >
+              {active && (
+                <motion.div
+                  layoutId="category-pill"
+                  className="glass glass-sheen absolute inset-0 rounded-full"
+                  transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                />
+              )}
+              <span className={`relative z-10 ${active ? "text-[var(--color-ink)]" : ""}`}>{c}</span>
+            </button>
+          );
+        })}
       </div>
 
       <div className="mt-4 grid grid-cols-2 gap-3 px-5">
@@ -68,10 +77,11 @@ export function PartnersPage() {
             (l) => linkStates[l.id]?.status === "ready"
           ).length;
           return (
-            <button
+            <motion.button
               key={p.id}
               onClick={() => setPartnerId(p.id)}
-              className="flex flex-col items-start gap-2.5 rounded-2xl border border-[var(--color-line)] p-4 text-left transition-colors active:bg-[var(--color-surface-2)]"
+              whileTap={{ scale: 0.96 }}
+              className="glass glass-sheen flex flex-col items-start gap-2.5 rounded-[24px] p-4 text-left"
             >
               <div className="flex w-full items-start justify-between">
                 <IconTile name={p.icon} tone="ink" />
@@ -85,7 +95,7 @@ export function PartnersPage() {
                 </p>
                 <p className="mt-0.5 text-[12px] text-[var(--color-muted)]">{p.category}</p>
               </div>
-            </button>
+            </motion.button>
           );
         })}
         {filtered.length === 0 && (

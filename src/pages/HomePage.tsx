@@ -15,8 +15,8 @@ export function HomePage() {
   const openLink = openLinkId ? linkById(openLinkId) : null;
 
   return (
-    <div className="flex-1 pb-6">
-      <div className="mx-5 mb-5 flex items-center gap-3 rounded-2xl bg-[var(--color-accent-tint)] px-4 py-3.5">
+    <div className="flex-1 pb-28">
+      <div className="glass-tint mx-5 mb-5 flex items-center gap-3 rounded-2xl bg-[var(--color-accent-tint)] px-4 py-3.5">
         <Icon name="ArrowRightLeft" size={18} className="shrink-0 text-[var(--color-accent)]" />
         <p className="text-[13px] font-medium leading-snug text-[var(--color-ink)]">
           Earn at one partner. Unlock a reward at another.

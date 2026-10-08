@@ -16,9 +16,9 @@ const sizeMap = {
 };
 
 const toneMap = {
-  ink: "bg-[var(--color-surface-2)] text-[var(--color-ink)]",
-  accent: "bg-[var(--color-accent-tint)] text-[var(--color-accent)]",
-  lime: "bg-[var(--color-lime-tint)] text-[var(--color-lime)]",
+  ink: "glass-tint bg-[var(--color-surface-2)]/60 text-[var(--color-ink)]",
+  accent: "glass-tint bg-[var(--color-accent-tint)] text-[var(--color-accent)]",
+  lime: "glass-tint bg-[var(--color-lime-tint)] text-[var(--color-lime)]",
 };
 
 export function IconTile({ name, tone = "ink", size = "md" }: IconTileProps) {

@@ -22,14 +22,21 @@ function App() {
 
   return (
     <>
+      <div className="glass-field" aria-hidden="true">
+        <span />
+        <span />
+        <span />
+      </div>
       <div className="grain" />
-      <Header onProfile={() => setProfileOpen(true)} />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/partners" element={<PartnersPage />} />
-        <Route path="/wallet" element={<WalletPage />} />
-      </Routes>
-      <TabBar />
+      <div className="relative z-10 flex flex-1 flex-col">
+        <Header onProfile={() => setProfileOpen(true)} />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/partners" element={<PartnersPage />} />
+          <Route path="/wallet" element={<WalletPage />} />
+        </Routes>
+        <TabBar />
+      </div>
       <ProfileDrawer open={profileOpen} onClose={() => setProfileOpen(false)} />
     </>
   );

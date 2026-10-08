@@ -32,7 +32,7 @@ export function Sheet({
             onDragEnd={(_, info) => {
               if (info.offset.y > 120) onClose();
             }}
-            className="relative z-10 max-h-[88dvh] w-full overflow-y-auto rounded-t-[28px] bg-[var(--color-surface)] pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-3 shadow-[0_-20px_60px_rgba(0,0,0,0.4)]"
+            className="glass-strong relative z-10 max-h-[88dvh] w-full overflow-y-auto rounded-t-[32px] border-b-0 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-3"
           >
             <div className="mx-auto mb-2 h-1.5 w-10 rounded-full bg-[var(--color-line)]" />
             {children}

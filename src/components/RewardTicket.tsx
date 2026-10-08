@@ -20,15 +20,19 @@ export function RewardTicket({
   return (
     <button
       onClick={onOpen}
-      className={`relative flex w-full items-stretch overflow-hidden rounded-2xl text-left transition-transform active:scale-[0.98] ${
+      className={`glass-tint relative flex w-full items-stretch overflow-hidden rounded-[22px] text-left transition-transform active:scale-[0.98] ${
         isRedeemed ? "opacity-60" : ""
       }`}
       style={{
-        background: isReady ? "var(--color-accent-tint)" : "var(--color-surface-2)",
+        background: isReady
+          ? "var(--color-accent-tint)"
+          : isRedeemed
+            ? "var(--color-lime-tint)"
+            : "var(--glass-bg)",
       }}
     >
       <div className="flex flex-1 items-center gap-3 py-4 pl-4 pr-3">
-        <IconTile name={to.icon} tone={isReady ? "accent" : "ink"} />
+        <IconTile name={to.icon} tone={isReady ? "accent" : isRedeemed ? "lime" : "ink"} />
         <div className="min-w-0 flex-1">
           <p className="truncate text-[14px] font-semibold text-[var(--color-ink)]">
             {link.rewardText}

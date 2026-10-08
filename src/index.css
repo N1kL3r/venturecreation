@@ -4,23 +4,33 @@
   --font-display: "Fraunces", ui-serif, Georgia, serif;
   --font-sans: "Sora", ui-sans-serif, system-ui, sans-serif;
 
-  --color-bg: #0f0d14;
+  --color-bg: #0b0a10;
   --color-surface: #17141e;
   --color-surface-2: #1f1b28;
   --color-raised: #262130;
   --color-ink: #f6f3ee;
   --color-ink-dim: #c9c4d6;
-  --color-muted: #8d879c;
+  --color-muted: #938da3;
   --color-line: rgba(255, 255, 255, 0.09);
   --color-accent: #ff5b3c;
   --color-accent-2: #ffe0ab;
-  --color-accent-tint: rgba(255, 91, 60, 0.14);
+  --color-accent-tint: rgba(255, 91, 60, 0.16);
   --color-lime: #c8ff4d;
-  --color-lime-tint: rgba(200, 255, 77, 0.14);
+  --color-lime-tint: rgba(200, 255, 77, 0.16);
+
+  --glass-bg: rgba(255, 255, 255, 0.07);
+  --glass-bg-strong: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.16);
+  --glass-highlight: rgba(255, 255, 255, 0.4);
+  --glass-shadow: rgba(0, 0, 0, 0.5);
+  --glass-specular: rgba(255, 255, 255, 0.5);
 
   --animate-float: float 6s ease-in-out infinite;
   --animate-pulse-ring: pulse-ring 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   --animate-shimmer: shimmer 2.4s linear infinite;
+  --animate-blob-a: blob-a 22s ease-in-out infinite;
+  --animate-blob-b: blob-b 26s ease-in-out infinite;
+  --animate-blob-c: blob-c 30s ease-in-out infinite;
 
   @keyframes float {
     0%, 100% { transform: translateY(0); }
@@ -35,18 +45,39 @@
     0% { background-position: -200% 0; }
     100% { background-position: 200% 0; }
   }
+  @keyframes blob-a {
+    0%, 100% { transform: translate(-10%, -10%) scale(1); }
+    33% { transform: translate(10%, 5%) scale(1.15); }
+    66% { transform: translate(-5%, 15%) scale(0.9); }
+  }
+  @keyframes blob-b {
+    0%, 100% { transform: translate(10%, 10%) scale(1); }
+    40% { transform: translate(-15%, -5%) scale(0.85); }
+    70% { transform: translate(5%, -15%) scale(1.1); }
+  }
+  @keyframes blob-c {
+    0%, 100% { transform: translate(0%, 0%) scale(1); }
+    50% { transform: translate(-10%, -20%) scale(1.2); }
+  }
 }
 
 :root[data-theme="light"] {
-  --color-bg: #faf7f1;
+  --color-bg: #f4f1ea;
   --color-surface: #ffffff;
   --color-surface-2: #f3efe6;
   --color-raised: #ffffff;
   --color-ink: #16131a;
   --color-ink-dim: #4a4553;
-  --color-muted: #8a8279;
+  --color-muted: #827c73;
   --color-line: rgba(22, 19, 26, 0.09);
   --color-accent-2: #b4442e;
+
+  --glass-bg: rgba(255, 255, 255, 0.45);
+  --glass-bg-strong: rgba(255, 255, 255, 0.62);
+  --glass-border: rgba(255, 255, 255, 0.7);
+  --glass-highlight: rgba(255, 255, 255, 0.85);
+  --glass-shadow: rgba(30, 24, 14, 0.14);
+  --glass-specular: rgba(255, 255, 255, 0.9);
 }
 
 * {
@@ -62,7 +93,7 @@ body {
   color: var(--color-ink);
   font-family: var(--font-sans);
   overscroll-behavior-y: none;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 #root {
@@ -90,7 +121,120 @@ body {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  opacity: 0.035;
+  opacity: 0.025;
   mix-blend-mode: overlay;
+  z-index: 1;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---- Liquid Glass background ---- */
+
+.glass-field {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.glass-field span {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(60px);
+  opacity: 0.55;
+  will-change: transform;
+}
+:root[data-theme="light"] .glass-field span {
+  opacity: 0.4;
+  filter: blur(70px);
+}
+
+.glass-field span:nth-child(1) {
+  width: 60vw;
+  height: 60vw;
+  left: -20%;
+  top: -10%;
+  background: radial-gradient(circle at 30% 30%, var(--color-accent), transparent 70%);
+  animation: var(--animate-blob-a);
+}
+.glass-field span:nth-child(2) {
+  width: 55vw;
+  height: 55vw;
+  right: -25%;
+  top: 15%;
+  background: radial-gradient(circle at 60% 40%, #6d8dff, transparent 70%);
+  animation: var(--animate-blob-b);
+}
+.glass-field span:nth-child(3) {
+  width: 50vw;
+  height: 50vw;
+  left: 10%;
+  bottom: -15%;
+  background: radial-gradient(circle at 50% 50%, var(--color-lime), transparent 70%);
+  animation: var(--animate-blob-c);
+}
+
+/* ---- Liquid Glass material ---- */
+
+.glass {
+  position: relative;
+  background: var(--glass-bg);
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    inset 0 1px 0 var(--glass-highlight),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.06),
+    0 12px 32px -8px var(--glass-shadow);
+}
+
+.glass-strong {
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(36px) saturate(190%);
+  -webkit-backdrop-filter: blur(36px) saturate(190%);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    inset 0 1px 0 var(--glass-highlight),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08),
+    0 24px 60px -12px var(--glass-shadow);
+}
+
+.glass-raised {
+  box-shadow:
+    inset 0 1px 0 var(--glass-highlight),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+    0 1px 1px rgba(0, 0, 0, 0.08),
+    0 18px 40px -10px var(--glass-shadow);
+}
+
+.glass-tint {
+  position: relative;
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    inset 0 1px 0 var(--glass-highlight),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08),
+    0 6px 18px -6px var(--glass-shadow);
+}
+
+.glass-sheen {
+  isolation: isolate;
+}
+.glass-sheen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    125deg,
+    var(--glass-specular) 0%,
+    transparent 28%,
+    transparent 72%,
+    var(--glass-specular) 100%
+  );
+  opacity: 0.16;
+  pointer-events: none;
+  mix-blend-mode: overlay;
 }

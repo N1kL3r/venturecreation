@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { partnerById } from "../data/partners";
 import { useAppStore } from "../store/useAppStore";
 import type { ChainLink } from "../types";
@@ -24,10 +25,12 @@ export function ChainRow({
     state.status === "redeemed" ? "lime" : state.status === "ready" ? "accent" : "ink";
 
   return (
-    <button
+    <motion.button
       type="button"
       onClick={() => onOpen(link.id)}
-      className="group flex w-full flex-col gap-3 border-b border-[var(--color-line)] py-4 text-left last:border-b-0"
+      whileTap={{ scale: 0.97 }}
+      transition={{ type: "spring", stiffness: 500, damping: 30 }}
+      className="glass glass-sheen mb-3 flex w-full flex-col gap-3 rounded-[28px] p-4 text-left"
     >
       <div className="flex items-center gap-3">
         <IconTile name={from.icon} tone={statusTone === "ink" ? "ink" : statusTone} />
@@ -58,21 +61,21 @@ export function ChainRow({
         <IconTile name={to.icon} tone="accent" size="sm" />
         <p className="text-[14px] font-semibold text-[var(--color-accent)]">{to.name}</p>
         {state.status === "redeemed" && (
-          <span className="ml-auto rounded-full bg-[var(--color-lime-tint)] px-2 py-0.5 text-[11px] font-medium text-[var(--color-lime)]">
+          <span className="glass-tint ml-auto rounded-full bg-[var(--color-lime-tint)] px-2.5 py-1 text-[11px] font-medium text-[var(--color-lime)]">
             Redeemed
           </span>
         )}
         {state.status === "ready" && (
-          <span className="ml-auto rounded-full bg-[var(--color-accent-tint)] px-2 py-0.5 text-[11px] font-medium text-[var(--color-accent)]">
+          <span className="glass-tint ml-auto rounded-full bg-[var(--color-accent-tint)] px-2.5 py-1 text-[11px] font-medium text-[var(--color-accent)]">
             Ready
           </span>
         )}
         {isLast && state.status === "progress" && (
-          <span className="ml-auto rounded-full border border-[var(--color-line)] px-2 py-0.5 text-[11px] text-[var(--color-muted)]">
+          <span className="glass-tint ml-auto rounded-full px-2.5 py-1 text-[11px] text-[var(--color-muted)]">
             Loop closes
           </span>
         )}
       </div>
-    </button>
+    </motion.button>
   );
 }

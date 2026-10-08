@@ -35,6 +35,15 @@ export function LoopDiagram({
 
   return (
     <div className="relative mx-auto" style={{ width: SIZE, height: SIZE }}>
+      <div
+        className="glass absolute rounded-full"
+        style={{
+          left: CX - R - 30,
+          top: CY - R - 30,
+          width: (R + 30) * 2,
+          height: (R + 30) * 2,
+        }}
+      />
       <svg width={SIZE} height={SIZE} className="absolute inset-0">
         <circle
           cx={CX}
@@ -73,13 +82,15 @@ export function LoopDiagram({
         })}
       </svg>
 
-      <div className="absolute inset-0 flex flex-col items-center justify-center px-10 text-center">
-        <span className="font-display text-2xl italic text-[var(--color-ink)]">
-          {closed}/{n}
-        </span>
-        <span className="mt-1 text-[11px] uppercase tracking-[0.14em] text-[var(--color-muted)]">
-          loop closed
-        </span>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="glass glass-sheen flex h-28 w-28 flex-col items-center justify-center rounded-full text-center">
+          <span className="font-display text-2xl italic text-[var(--color-ink)]">
+            {closed}/{n}
+          </span>
+          <span className="mt-1 text-[10px] uppercase tracking-[0.14em] text-[var(--color-muted)]">
+            loop closed
+          </span>
+        </div>
       </div>
 
       {chainLinks.map((link, i) => {
@@ -92,13 +103,13 @@ export function LoopDiagram({
             ? "ring-2 ring-[var(--color-lime)]"
             : state === "ready"
               ? "ring-2 ring-[var(--color-accent)] animate-pulse-ring"
-              : "ring-1 ring-[var(--color-line)]";
+              : "";
         return (
           <button
             key={link.id}
             type="button"
             onClick={() => onSelectLink(link.id)}
-            className={`absolute flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl bg-[var(--color-surface)] text-[var(--color-ink)] shadow-lg shadow-black/20 transition-transform active:scale-90 ${ring}`}
+            className={`glass glass-sheen absolute flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl text-[var(--color-ink)] transition-transform active:scale-90 ${ring}`}
             style={{ left: pos.x, top: pos.y }}
             aria-label={partner.name}
           >
