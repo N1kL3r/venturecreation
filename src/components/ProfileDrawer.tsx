@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useMemo } from "react";
+import { Link } from "react-router-dom";
 import { loops } from "../data/partners";
 import { useAppStore } from "../store/useAppStore";
 import { Icon } from "./IconTile";
@@ -90,6 +91,19 @@ export function ProfileDrawer({ open, onClose }: { open: boolean; onClose: () =>
               <Icon name="RotateCcw" size={15} />
               Reset demo progress
             </button>
+
+            <Link
+              to="/merchant"
+              onClick={onClose}
+              className="glass mt-3 flex items-center gap-3 rounded-2xl px-4 py-3.5 transition-transform active:scale-[0.98]"
+            >
+              <Icon name="Store" size={16} className="text-[var(--color-accent)]" />
+              <div className="flex-1">
+                <p className="text-sm font-medium text-[var(--color-ink)]">Merchant console</p>
+                <p className="text-[11px] text-[var(--color-muted)]">Verify codes as a store (demo)</p>
+              </div>
+              <Icon name="ChevronRight" size={16} className="text-[var(--color-muted)]" />
+            </Link>
 
             <div className="glass mt-auto rounded-2xl p-4 text-[12px] leading-relaxed text-[var(--color-muted)]">
               <p className="mb-1 font-semibold text-[var(--color-ink-dim)]">How Lizly works</p>

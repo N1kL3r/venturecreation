@@ -5,20 +5,13 @@ import { Onboarding } from "./components/Onboarding";
 import { ProfileDrawer } from "./components/ProfileDrawer";
 import { TabBar } from "./components/TabBar";
 import { HomePage } from "./pages/HomePage";
+import { MerchantPage } from "./pages/MerchantPage";
 import { PartnersPage } from "./pages/PartnersPage";
 import { WalletPage } from "./pages/WalletPage";
 import { useAppStore } from "./store/useAppStore";
 
-function App() {
-  const theme = useAppStore((s) => s.theme);
-  const onboarded = useAppStore((s) => s.onboarded);
+function CustomerShell() {
   const [profileOpen, setProfileOpen] = useState(false);
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [theme]);
-
-  if (!onboarded) return <Onboarding />;
 
   return (
     <>
@@ -39,6 +32,24 @@ function App() {
       </div>
       <ProfileDrawer open={profileOpen} onClose={() => setProfileOpen(false)} />
     </>
+  );
+}
+
+function App() {
+  const theme = useAppStore((s) => s.theme);
+  const onboarded = useAppStore((s) => s.onboarded);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
+
+  if (!onboarded) return <Onboarding />;
+
+  return (
+    <Routes>
+      <Route path="/merchant" element={<MerchantPage />} />
+      <Route path="/*" element={<CustomerShell />} />
+    </Routes>
   );
 }
 

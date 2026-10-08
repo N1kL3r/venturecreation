@@ -80,6 +80,33 @@
   --glass-specular: rgba(255, 255, 255, 0.9);
 }
 
+/* ---- Merchant console: a distinct, always-dark "pro tool" palette ---- */
+.theme-merchant {
+  min-height: 100dvh;
+  background: var(--color-bg);
+
+  --color-bg: #0a0e16;
+  --color-surface: #11151f;
+  --color-surface-2: #161b27;
+  --color-raised: #1c2231;
+  --color-ink: #eef2fa;
+  --color-ink-dim: #b9c2d6;
+  --color-muted: #7b8396;
+  --color-line: rgba(255, 255, 255, 0.1);
+  --color-accent: #3b82f6;
+  --color-accent-2: #93c5fd;
+  --color-accent-tint: rgba(59, 130, 246, 0.18);
+  --color-lime: #34d399;
+  --color-lime-tint: rgba(52, 211, 153, 0.16);
+
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-bg-strong: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(147, 197, 253, 0.16);
+  --glass-highlight: rgba(255, 255, 255, 0.3);
+  --glass-shadow: rgba(0, 0, 0, 0.55);
+  --glass-specular: rgba(147, 197, 253, 0.4);
+}
+
 * {
   -webkit-tap-highlight-color: transparent;
 }

@@ -1,5 +1,6 @@
 import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { partnerById } from "../data/partners";
 import { useAppStore } from "../store/useAppStore";
 import type { ChainLink, Unit } from "../types";
@@ -37,7 +38,6 @@ export function ChainSheet({
   const state = useAppStore((s) => (link ? s.linkStates[link.id] : undefined));
   const simulate = useAppStore((s) => s.simulate);
   const reveal = useAppStore((s) => s.reveal);
-  const redeem = useAppStore((s) => s.redeem);
   const [showConfetti, setShowConfetti] = useState(false);
   const [scanOpen, setScanOpen] = useState(false);
   const prevStatus = useRef<string | undefined>(undefined);
@@ -151,15 +151,18 @@ export function ChainSheet({
                 </span>
               </div>
               <p className="px-8 text-center text-xs text-[var(--color-muted)]">
-                Show this to staff at {to.name} to redeem
+                Show this to staff at {to.name} — they'll verify it on their end
               </p>
-              <button
-                onClick={() => redeem(link.id)}
-                className="glass-sheen mx-5 flex items-center gap-2 rounded-2xl bg-[var(--color-ink)] px-6 py-3 text-sm font-semibold text-[var(--color-bg)] transition-transform active:scale-[0.98]"
+              <div className="glass-tint flex items-center gap-2 rounded-full px-4 py-2 text-xs text-[var(--color-muted)]">
+                <Icon name="Clock" size={13} />
+                Waiting for staff to confirm
+              </div>
+              <Link
+                to="/merchant"
+                className="text-[11px] text-[var(--color-muted)] underline underline-offset-2"
               >
-                <Icon name="Check" size={16} />
-                Mark as redeemed
-              </button>
+                Demo: open merchant view to verify this code
+              </Link>
             </div>
           )}
 

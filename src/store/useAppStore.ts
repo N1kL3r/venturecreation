@@ -1,7 +1,13 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { linkById, links, loops } from "../data/partners";
-import type { LinkState } from "../types";
+import type { ChainLink, LinkState } from "../types";
+
+export type RedeemByCodeResult =
+  | { ok: true; link: ChainLink }
+  | { ok: false; reason: "not_found" }
+  | { ok: false; reason: "wrong_store"; link: ChainLink }
+  | { ok: false; reason: "already_redeemed"; link: ChainLink };
 
 function makeCode(linkId: string) {
   const rand = Math.random().toString(36).slice(2, 6).toUpperCase();
@@ -44,6 +50,7 @@ interface AppState {
   simulate: (linkId: string, amount?: number) => void;
   reveal: (linkId: string) => void;
   redeem: (linkId: string) => void;
+  redeemByCode: (code: string, partnerId: string) => RedeemByCodeResult;
   resetDemo: () => void;
   loopClosedCount: (loopId: string) => number;
   stats: () => { loopsClosed: number; redeemed: number; inProgress: number; totalStamps: number };
@@ -110,6 +117,28 @@ export const useAppStore = create<AppState>()(
             },
           };
         }),
+
+      redeemByCode: (code, partnerId) => {
+        const normalized = code.trim().toUpperCase();
+        const s = get();
+        const entry = Object.entries(s.linkStates).find(
+          ([, state]) => state.code === normalized
+        );
+        if (!entry) return { ok: false, reason: "not_found" };
+
+        const [linkId, state] = entry;
+        const link = linkById(linkId);
+        if (link.toId !== partnerId) return { ok: false, reason: "wrong_store", link };
+        if (state.status !== "ready") return { ok: false, reason: "already_redeemed", link };
+
+        set((s2) => ({
+          linkStates: {
+            ...s2.linkStates,
+            [linkId]: { ...state, status: "redeemed", redeemedAt: Date.now() },
+          },
+        }));
+        return { ok: true, link };
+      },
 
       resetDemo: () => set({ linkStates: seedState }),
 
