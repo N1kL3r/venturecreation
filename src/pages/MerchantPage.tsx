@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { partnerById, partners } from "../data/partners";
 import { Icon, IconTile } from "../components/IconTile";
+import { QrScanner } from "../components/QrScanner";
 import { useLoopData } from "../hooks/useLoopData";
 import { useAppStore } from "../store/useAppStore";
 
@@ -12,6 +13,7 @@ type Feedback =
 export function MerchantPage() {
   const [partnerId, setPartnerId] = useState(partners[0].id);
   const [code, setCode] = useState("");
+  const [scannerOpen, setScannerOpen] = useState(false);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const redeemByCode = useAppStore((s) => s.redeemByCode);
   const linkStates = useAppStore((s) => s.linkStates);
@@ -26,9 +28,10 @@ export function MerchantPage() {
       .sort((a, b) => (b.state.redeemedAt ?? 0) - (a.state.redeemedAt ?? 0));
   }, [partnerId, linkStates]);
 
-  function handleVerify() {
-    if (!code.trim()) return;
-    const result = redeemByCode(code, partnerId);
+  function handleVerify(raw?: string) {
+    const value = (raw ?? code).trim();
+    if (!value) return;
+    const result = redeemByCode(value, partnerId);
 
     if (result.ok) {
       const from = partnerById(result.link.fromId);
@@ -56,6 +59,11 @@ export function MerchantPage() {
     } else {
       setFeedback({ kind: "error", message: "This code has already been redeemed." });
     }
+  }
+
+  function handleScanResult(value: string) {
+    setScannerOpen(false);
+    handleVerify(value);
   }
 
   return (
@@ -112,8 +120,22 @@ export function MerchantPage() {
             </div>
           </div>
 
+          <button
+            onClick={() => setScannerOpen(true)}
+            className="glass-sheen flex w-full items-center justify-center gap-2 rounded-2xl bg-[var(--color-accent)] py-3.5 text-[15px] font-semibold text-white transition-transform active:scale-[0.98]"
+          >
+            <Icon name="ScanLine" size={17} />
+            Scan customer's QR
+          </button>
+
+          <div className="my-4 flex items-center gap-3">
+            <div className="h-px flex-1 bg-[var(--color-line)]" />
+            <span className="text-[11px] uppercase tracking-wide text-[var(--color-muted)]">or</span>
+            <div className="h-px flex-1 bg-[var(--color-line)]" />
+          </div>
+
           <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.08em] text-[var(--color-muted)]">
-            Customer's code
+            Enter the code
           </label>
           <input
             value={code}
@@ -124,17 +146,13 @@ export function MerchantPage() {
           />
 
           <button
-            onClick={handleVerify}
+            onClick={() => handleVerify()}
             disabled={!code.trim()}
-            className="glass-sheen mt-3 flex w-full items-center justify-center gap-2 rounded-2xl bg-[var(--color-accent)] py-3.5 text-sm font-semibold text-white transition-transform active:scale-[0.98] disabled:opacity-40"
+            className="glass mt-3 flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-sm font-medium text-[var(--color-ink-dim)] transition-transform active:scale-[0.98] disabled:opacity-40"
           >
-            <Icon name="ShieldCheck" size={16} />
+            <Icon name="ShieldCheck" size={15} />
             Verify &amp; redeem
           </button>
-
-          <p className="mt-3 text-center text-[11px] text-[var(--color-muted)]">
-            Tip: ask the customer to read the code from their Wallet screen
-          </p>
         </div>
 
         {feedback && (
@@ -200,6 +218,14 @@ export function MerchantPage() {
           </div>
         )}
       </div>
+
+      <QrScanner
+        open={scannerOpen}
+        title={`Scan at ${partner.name}`}
+        subtitle="Looking for the customer's reward QR"
+        onResult={handleScanResult}
+        onClose={() => setScannerOpen(false)}
+      />
     </div>
   );
 }
