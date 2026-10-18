@@ -177,7 +177,7 @@ export const links: ChainLink[] = [
     earnLabel: "Make 3 purchases",
     goal: 3,
     unit: "purchases",
-    rewardText: "2 weeks of free coffee",
+    rewardText: "3 free coffees",
   },
   {
     id: "link-bloom-vinyl",
