@@ -1,4 +1,3 @@
-import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { partnerById } from "../data/partners";
@@ -37,7 +36,6 @@ export function ChainSheet({
 }) {
   const state = useAppStore((s) => (link ? s.linkStates[link.id] : undefined));
   const simulate = useAppStore((s) => s.simulate);
-  const reveal = useAppStore((s) => s.reveal);
   const [showConfetti, setShowConfetti] = useState(false);
   const [scanOpen, setScanOpen] = useState(false);
   const prevStatus = useRef<string | undefined>(undefined);
@@ -126,42 +124,28 @@ export function ChainSheet({
           {!isReady && !isRedeemed && (
             <div className="glass-tint flex items-center justify-center gap-2 rounded-2xl bg-[var(--color-surface-2)]/50 py-4 text-sm text-[var(--color-muted)]">
               <Icon name="Lock" size={15} />
-              Reach your goal to unlock the redeem code
+              Reach your goal to add this reward to your Lizly Pass
             </div>
           )}
 
-          {isReady && !state.code && (
-            <button
-              onClick={() => reveal(link.id)}
-              className="glass-sheen flex w-full items-center justify-center gap-2 rounded-2xl bg-[var(--color-accent)] py-4 text-[15px] font-semibold text-white shadow-lg shadow-[var(--color-accent-tint)] transition-transform active:scale-[0.98]"
-            >
-              <Icon name="Sparkles" size={17} />
-              Reveal your reward
-            </button>
-          )}
-
-          {isReady && state.code && (
-            <div className="glass glass-sheen flex flex-col items-center gap-4 rounded-[26px] py-6">
-              <div className="rounded-xl bg-white p-3">
-                <QRCodeSVG value={state.code} size={132} />
+          {isReady && (
+            <div className="glass glass-sheen flex flex-col items-center gap-3 rounded-[26px] px-6 py-6 text-center">
+              <div className="glass-tint flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-accent-tint)] text-[var(--color-accent)]">
+                <Icon name="Wallet" size={22} />
               </div>
-              <div className="glass-tint flex items-center gap-2 rounded-full px-4 py-1.5">
-                <span className="font-mono text-sm tracking-wider text-[var(--color-ink)]">
-                  {state.code}
-                </span>
-              </div>
-              <p className="px-8 text-center text-xs text-[var(--color-muted)]">
-                Show this to staff at {to.name} — they'll verify it on their end
+              <p className="text-[14px] font-semibold text-[var(--color-ink)]">
+                Already on your Lizly Pass
               </p>
-              <div className="glass-tint flex items-center gap-2 rounded-full px-4 py-2 text-xs text-[var(--color-muted)]">
-                <Icon name="Clock" size={13} />
-                Waiting for staff to confirm
-              </div>
+              <p className="text-[12px] leading-relaxed text-[var(--color-muted)]">
+                No separate code to reveal — show your one Lizly Pass at {to.name} and this
+                reward is matched and redeemed automatically.
+              </p>
               <Link
-                to="/merchant"
-                className="text-[11px] text-[var(--color-muted)] underline underline-offset-2"
+                to="/wallet"
+                className="glass-sheen mt-1 flex w-full items-center justify-center gap-2 rounded-2xl bg-[var(--color-accent)] py-3 text-[14px] font-semibold text-white transition-transform active:scale-[0.98]"
               >
-                Demo: open merchant view to verify this code
+                <Icon name="QrCode" size={16} />
+                Open my Lizly Pass
               </Link>
             </div>
           )}

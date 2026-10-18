@@ -3,19 +3,22 @@ import { Link } from "react-router-dom";
 import { partnerById, partners } from "../data/partners";
 import { Icon, IconTile } from "../components/IconTile";
 import { QrScanner } from "../components/QrScanner";
+import type { ChainLink } from "../types";
 import { useLoopData } from "../hooks/useLoopData";
 import { useAppStore } from "../store/useAppStore";
 
 type Feedback =
-  | { kind: "success"; rewardText: string; fromName: string; toName: string }
+  | { kind: "success"; links: ChainLink[]; toName: string }
   | { kind: "error"; message: string };
+
+const DAY_MS = 1000 * 60 * 60 * 24;
 
 export function MerchantPage() {
   const [partnerId, setPartnerId] = useState(partners[0].id);
   const [code, setCode] = useState("");
   const [scannerOpen, setScannerOpen] = useState(false);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
-  const redeemByCode = useAppStore((s) => s.redeemByCode);
+  const redeemAtPartner = useAppStore((s) => s.redeemAtPartner);
   const linkStates = useAppStore((s) => s.linkStates);
   const { allLinks } = useLoopData();
 
@@ -26,38 +29,33 @@ export function MerchantPage() {
       .filter((l) => l.toId === partnerId && linkStates[l.id]?.status === "redeemed")
       .map((l) => ({ link: l, state: linkStates[l.id] }))
       .sort((a, b) => (b.state.redeemedAt ?? 0) - (a.state.redeemedAt ?? 0));
-  }, [partnerId, linkStates]);
+  }, [partnerId, linkStates, allLinks]);
+
+  const todayCount = recent.filter(
+    ({ state }) => state.redeemedAt && Date.now() - state.redeemedAt < DAY_MS
+  ).length;
 
   function handleVerify(raw?: string) {
     const value = (raw ?? code).trim();
     if (!value) return;
-    const result = redeemByCode(value, partnerId);
+    const result = redeemAtPartner(value, partnerId);
 
     if (result.ok) {
-      const from = partnerById(result.link.fromId);
-      setFeedback({
-        kind: "success",
-        rewardText: result.link.rewardText,
-        fromName: from.name,
-        toName: partner.name,
-      });
+      setFeedback({ kind: "success", links: result.links, toName: partner.name });
       setCode("");
       return;
     }
 
-    if (result.reason === "not_found") {
+    if (result.reason === "invalid_code") {
       setFeedback({
         kind: "error",
-        message: "Code not recognized. Double-check it with the customer.",
-      });
-    } else if (result.reason === "wrong_store") {
-      const correctPartner = partnerById(result.link.toId);
-      setFeedback({
-        kind: "error",
-        message: `This code is for ${correctPartner.name}, not ${partner.name}.`,
+        message: "Pass not recognized. Double-check it with the customer.",
       });
     } else {
-      setFeedback({ kind: "error", message: "This code has already been redeemed." });
+      setFeedback({
+        kind: "error",
+        message: `Nothing ready to redeem at ${partner.name} on this pass yet.`,
+      });
     }
   }
 
@@ -88,7 +86,7 @@ export function MerchantPage() {
         <p className="mb-2 text-xs font-semibold uppercase tracking-[0.1em] text-[var(--color-muted)]">
           Signed in as
         </p>
-        <div className="scrollbar-none mb-6 flex gap-2 overflow-x-auto pb-1">
+        <div className="scrollbar-none mb-5 flex gap-2 overflow-x-auto pb-1">
           {partners.map((p) => {
             const active = p.id === partnerId;
             return (
@@ -111,12 +109,23 @@ export function MerchantPage() {
           })}
         </div>
 
+        <div className="mb-5 grid grid-cols-2 gap-3">
+          <div className="glass rounded-2xl px-4 py-3.5">
+            <p className="text-xl font-bold text-[var(--color-ink)]">{todayCount}</p>
+            <p className="text-[11px] text-[var(--color-muted)]">Redeemed today</p>
+          </div>
+          <div className="glass rounded-2xl px-4 py-3.5">
+            <p className="text-xl font-bold text-[var(--color-ink)]">{recent.length}</p>
+            <p className="text-[11px] text-[var(--color-muted)]">All time</p>
+          </div>
+        </div>
+
         <div className="glass glass-sheen rounded-[28px] p-5">
           <div className="mb-4 flex items-center gap-3">
             <IconTile name={partner.icon} tone="accent" />
             <div>
               <p className="text-[15px] font-semibold text-[var(--color-ink)]">{partner.name}</p>
-              <p className="text-[12px] text-[var(--color-muted)]">Verify a customer's reward code</p>
+              <p className="text-[12px] text-[var(--color-muted)]">Scan a customer's Lizly Pass</p>
             </div>
           </div>
 
@@ -125,7 +134,7 @@ export function MerchantPage() {
             className="glass-sheen flex w-full items-center justify-center gap-2 rounded-2xl bg-[var(--color-accent)] py-3.5 text-[15px] font-semibold text-white transition-transform active:scale-[0.98]"
           >
             <Icon name="ScanLine" size={17} />
-            Scan customer's QR
+            Scan customer's Lizly Pass
           </button>
 
           <div className="my-4 flex items-center gap-3">
@@ -135,13 +144,13 @@ export function MerchantPage() {
           </div>
 
           <label className="mb-1.5 block text-xs font-medium uppercase tracking-[0.08em] text-[var(--color-muted)]">
-            Enter the code
+            Enter the pass code
           </label>
           <input
             value={code}
             onChange={(e) => setCode(e.target.value.toUpperCase())}
             onKeyDown={(e) => e.key === "Enter" && handleVerify()}
-            placeholder="LIZLY-XXXX-XXXX"
+            placeholder="LIZLY-PASS-XXXX-XXXX"
             className="glass-tint w-full rounded-2xl px-4 py-3.5 font-mono text-[15px] tracking-wider text-[var(--color-ink)] outline-none placeholder:text-[var(--color-muted)]"
           />
 
@@ -153,6 +162,9 @@ export function MerchantPage() {
             <Icon name="ShieldCheck" size={15} />
             Verify &amp; redeem
           </button>
+          <p className="mt-3 text-center text-[11px] text-[var(--color-muted)]">
+            One pass per customer — we match whatever's ready at {partner.name} automatically.
+          </p>
         </div>
 
         {feedback && (
@@ -169,13 +181,17 @@ export function MerchantPage() {
               }`}
             />
             {feedback.kind === "success" ? (
-              <div>
+              <div className="min-w-0 flex-1">
                 <p className="text-[13px] font-semibold text-[var(--color-ink)]">
-                  Approved — {feedback.rewardText}
+                  {feedback.links.length === 1
+                    ? "Approved"
+                    : `Approved — ${feedback.links.length} rewards`}
                 </p>
-                <p className="text-[12px] text-[var(--color-muted)]">
-                  Earned at {feedback.fromName} · redeemed at {feedback.toName}
-                </p>
+                {feedback.links.map((link) => (
+                  <p key={link.id} className="truncate text-[12px] text-[var(--color-muted)]">
+                    {link.rewardText} · earned at {partnerById(link.fromId).name}
+                  </p>
+                ))}
               </div>
             ) : (
               <p className="text-[13px] font-medium text-[var(--color-ink)]">{feedback.message}</p>
@@ -222,7 +238,7 @@ export function MerchantPage() {
       <QrScanner
         open={scannerOpen}
         title={`Scan at ${partner.name}`}
-        subtitle="Looking for the customer's reward QR"
+        subtitle="Looking for the customer's Lizly Pass"
         onResult={handleScanResult}
         onClose={() => setScannerOpen(false)}
       />

@@ -3,20 +3,16 @@ import { persist } from "zustand/middleware";
 import { earnLabelFor, linkById, links, loops } from "../data/partners";
 import type { ChainLink, LinkState, Loop, Unit } from "../types";
 
-export type RedeemByCodeResult =
-  | { ok: true; link: ChainLink }
-  | { ok: false; reason: "not_found" }
-  | { ok: false; reason: "wrong_store"; link: ChainLink }
-  | { ok: false; reason: "already_redeemed"; link: ChainLink };
+export type RedeemAtPartnerResult =
+  | { ok: true; links: ChainLink[] }
+  | { ok: false; reason: "invalid_code" }
+  | { ok: false; reason: "none_ready" };
 
 const customLoopAccents = ["#A78BFA", "#38BDF8", "#F472B6", "#FB923C", "#2DD4BF"];
 
-function makeCode(linkId: string) {
-  const rand = Math.random().toString(36).slice(2, 6).toUpperCase();
-  const tag = linkId.startsWith("custom-")
-    ? Math.random().toString(36).slice(2, 6).toUpperCase()
-    : linkId.slice(5, 9).toUpperCase();
-  return `LIZLY-${tag}-${rand}`;
+function makePassCode() {
+  const rand = Math.random().toString(36).slice(2, 10).toUpperCase();
+  return `LIZLY-PASS-${rand.slice(0, 4)}-${rand.slice(4, 8)}`;
 }
 
 const seedState: Record<string, LinkState> = {
@@ -27,7 +23,6 @@ const seedState: Record<string, LinkState> = {
   "link-wool-brew": {
     current: 3,
     status: "redeemed",
-    code: "LIZLY-BREW-9K2L",
     redeemedAt: Date.now() - 1000 * 60 * 60 * 24 * 3,
   },
   "link-bloom-vinyl": { current: 2, status: "progress" },
@@ -37,7 +32,6 @@ const seedState: Record<string, LinkState> = {
   "link-yoga-gronn": {
     current: 6,
     status: "redeemed",
-    code: "LIZLY-GRON-4F7Q",
     redeemedAt: Date.now() - 1000 * 60 * 60 * 24 * 9,
   },
   "link-gronn-massasje": { current: 120, status: "progress" },
@@ -55,6 +49,7 @@ interface CreateCustomLoopParams {
 interface AppState {
   theme: "dark" | "light";
   onboarded: boolean;
+  passCode: string;
   linkStates: Record<string, LinkState>;
   activeLoopId: string;
   customLoops: Loop[];
@@ -63,9 +58,7 @@ interface AppState {
   completeOnboarding: () => void;
   setActiveLoop: (id: string) => void;
   simulate: (linkId: string, amount?: number) => void;
-  reveal: (linkId: string) => void;
-  redeem: (linkId: string) => void;
-  redeemByCode: (code: string, partnerId: string) => RedeemByCodeResult;
+  redeemAtPartner: (code: string, partnerId: string) => RedeemAtPartnerResult;
   createCustomLoop: (params: CreateCustomLoopParams) => void;
   deleteCustomLoop: (loopId: string) => void;
   resetDemo: () => void;
@@ -82,6 +75,7 @@ export const useAppStore = create<AppState>()(
     (set, get) => ({
       theme: "dark",
       onboarded: false,
+      passCode: makePassCode(),
       linkStates: seedState,
       activeLoopId: loops[0].id,
       customLoops: [],
@@ -112,55 +106,28 @@ export const useAppStore = create<AppState>()(
           };
         }),
 
-      reveal: (linkId) =>
-        set((s) => {
-          const prev = s.linkStates[linkId];
-          if (!prev || prev.status !== "ready" || prev.code) return s;
-          return {
-            linkStates: {
-              ...s.linkStates,
-              [linkId]: { ...prev, code: makeCode(linkId) },
-            },
-          };
-        }),
-
-      redeem: (linkId) =>
-        set((s) => {
-          const prev = s.linkStates[linkId];
-          if (!prev || prev.status !== "ready") return s;
-          return {
-            linkStates: {
-              ...s.linkStates,
-              [linkId]: {
-                ...prev,
-                status: "redeemed",
-                code: prev.code ?? makeCode(linkId),
-                redeemedAt: Date.now(),
-              },
-            },
-          };
-        }),
-
-      redeemByCode: (code, partnerId) => {
-        const normalized = code.trim().toUpperCase();
+      redeemAtPartner: (code, partnerId) => {
         const s = get();
-        const entry = Object.entries(s.linkStates).find(
-          ([, state]) => state.code === normalized
-        );
-        if (!entry) return { ok: false, reason: "not_found" };
+        if (code.trim().toUpperCase() !== s.passCode) {
+          return { ok: false, reason: "invalid_code" };
+        }
 
-        const [linkId, state] = entry;
-        const link = resolveLink(s.customLinks, linkId);
-        if (link.toId !== partnerId) return { ok: false, reason: "wrong_store", link };
-        if (state.status !== "ready") return { ok: false, reason: "already_redeemed", link };
+        const allLinks = [...links, ...s.customLinks];
+        const readyIds = allLinks
+          .filter((l) => l.toId === partnerId && s.linkStates[l.id]?.status === "ready")
+          .map((l) => l.id);
+        if (readyIds.length === 0) return { ok: false, reason: "none_ready" };
 
+        const redeemedAt = Date.now();
         set((s2) => ({
           linkStates: {
             ...s2.linkStates,
-            [linkId]: { ...state, status: "redeemed", redeemedAt: Date.now() },
+            ...Object.fromEntries(
+              readyIds.map((id) => [id, { ...s2.linkStates[id], status: "redeemed" as const, redeemedAt }])
+            ),
           },
         }));
-        return { ok: true, link };
+        return { ok: true, links: readyIds.map((id) => resolveLink(get().customLinks, id)) };
       },
 
       createCustomLoop: ({ name, partnerIds, unit, goal, rewardText }) =>
@@ -236,10 +203,11 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: "lizly-storage",
-      version: 4,
+      version: 5,
       partialize: (s) => ({
         theme: s.theme,
         onboarded: s.onboarded,
+        passCode: s.passCode,
         linkStates: s.linkStates,
         activeLoopId: s.activeLoopId,
         customLoops: s.customLoops,

@@ -80,31 +80,31 @@
   --glass-specular: rgba(255, 255, 255, 0.9);
 }
 
-/* ---- Merchant console: a distinct, always-dark "pro tool" palette ---- */
+/* ---- Merchant console: a distinct, always-white "pro tool" palette ---- */
 .theme-merchant {
   min-height: 100dvh;
   background: var(--color-bg);
 
-  --color-bg: #0a0e16;
-  --color-surface: #11151f;
-  --color-surface-2: #161b27;
-  --color-raised: #1c2231;
-  --color-ink: #eef2fa;
-  --color-ink-dim: #b9c2d6;
-  --color-muted: #7b8396;
-  --color-line: rgba(255, 255, 255, 0.1);
-  --color-accent: #3b82f6;
-  --color-accent-2: #93c5fd;
-  --color-accent-tint: rgba(59, 130, 246, 0.18);
-  --color-lime: #34d399;
-  --color-lime-tint: rgba(52, 211, 153, 0.16);
+  --color-bg: #f6f7f9;
+  --color-surface: #ffffff;
+  --color-surface-2: #eef1f5;
+  --color-raised: #ffffff;
+  --color-ink: #10151c;
+  --color-ink-dim: #4b5565;
+  --color-muted: #8993a4;
+  --color-line: rgba(16, 21, 28, 0.08);
+  --color-accent: #2563eb;
+  --color-accent-2: #1d4ed8;
+  --color-accent-tint: rgba(37, 99, 235, 0.1);
+  --color-lime: #059669;
+  --color-lime-tint: rgba(5, 150, 105, 0.12);
 
-  --glass-bg: rgba(255, 255, 255, 0.05);
-  --glass-bg-strong: rgba(255, 255, 255, 0.08);
-  --glass-border: rgba(147, 197, 253, 0.16);
-  --glass-highlight: rgba(255, 255, 255, 0.3);
-  --glass-shadow: rgba(0, 0, 0, 0.55);
-  --glass-specular: rgba(147, 197, 253, 0.4);
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-bg-strong: rgba(255, 255, 255, 0.82);
+  --glass-border: rgba(16, 21, 28, 0.07);
+  --glass-highlight: rgba(255, 255, 255, 0.9);
+  --glass-shadow: rgba(16, 21, 28, 0.08);
+  --glass-specular: rgba(255, 255, 255, 0.95);
 }
 
 * {

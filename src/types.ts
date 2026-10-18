@@ -37,6 +37,5 @@ export type LinkStatus = "progress" | "ready" | "redeemed";
 export interface LinkState {
   current: number;
   status: LinkStatus;
-  code?: string;
   redeemedAt?: number;
 }
