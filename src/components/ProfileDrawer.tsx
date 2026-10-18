@@ -66,14 +66,16 @@ export function ProfileDrawer({ open, onClose }: { open: boolean; onClose: () =>
               <StatTile icon="Award" label="Total taps logged" value={stats.totalStamps} />
             </div>
 
-            <div className="glass mt-6 flex items-center justify-between rounded-2xl px-4 py-3.5">
-              <div className="flex items-center gap-2 text-sm text-[var(--color-ink)]">
+            <button
+              onClick={toggleTheme}
+              className="glass mt-6 flex w-full items-center justify-between rounded-2xl px-4 py-3.5 text-left"
+            >
+              <span className="flex items-center gap-2 text-sm text-[var(--color-ink)]">
                 <Icon name={theme === "dark" ? "Moon" : "Sun"} size={16} />
                 {theme === "dark" ? "Dark mode" : "Light mode"}
-              </div>
-              <button
-                onClick={toggleTheme}
-                className={`relative h-6 w-11 rounded-full transition-colors ${
+              </span>
+              <span
+                className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${
                   theme === "dark" ? "bg-[var(--color-accent)]" : "bg-[var(--color-line)]"
                 }`}
               >
@@ -82,8 +84,8 @@ export function ProfileDrawer({ open, onClose }: { open: boolean; onClose: () =>
                     theme === "dark" ? "translate-x-5" : "translate-x-0.5"
                   }`}
                 />
-              </button>
-            </div>
+              </span>
+            </button>
 
             <button
               onClick={resetDemo}
