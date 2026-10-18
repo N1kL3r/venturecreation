@@ -5,15 +5,15 @@ const RING_SIZE = 56;
 const STROKE = 4;
 
 const ringTone: Record<LinkStatus, string> = {
-  progress: "var(--color-accent)",
-  ready: "var(--color-accent)",
-  redeemed: "var(--color-lime)",
+  progress: "var(--color-ring-rust)",
+  ready: "var(--color-ring-rust)",
+  redeemed: "var(--color-ring-sage)",
 };
 
 const fillTone: Record<LinkStatus, string> = {
   progress: "bg-[var(--color-surface-2)]/60 text-[var(--color-ink)]",
-  ready: "bg-[var(--color-accent-tint)] text-[var(--color-accent)]",
-  redeemed: "bg-[var(--color-lime-tint)] text-[var(--color-lime)]",
+  ready: "bg-[var(--color-ring-rust-tint)] text-[var(--color-ring-rust)]",
+  redeemed: "bg-[var(--color-ring-sage-tint)] text-[var(--color-ring-sage)]",
 };
 
 export function StampRing({
@@ -51,7 +51,7 @@ export function StampRing({
           strokeLinecap="round"
           style={
             status === "ready"
-              ? { filter: "drop-shadow(0 0 5px rgba(255,91,60,0.55))" }
+              ? { filter: "drop-shadow(0 0 5px rgba(166,84,60,0.5))" }
               : undefined
           }
         />

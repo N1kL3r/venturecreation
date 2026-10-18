@@ -18,6 +18,11 @@
   --color-lime: #c8ff4d;
   --color-lime-tint: rgba(200, 255, 77, 0.16);
 
+  --color-ring-rust: #a6543c;
+  --color-ring-rust-tint: rgba(166, 84, 60, 0.18);
+  --color-ring-sage: #4f7858;
+  --color-ring-sage-tint: rgba(79, 120, 88, 0.18);
+
   --glass-bg: rgba(255, 255, 255, 0.07);
   --glass-bg-strong: rgba(255, 255, 255, 0.1);
   --glass-border: rgba(255, 255, 255, 0.16);

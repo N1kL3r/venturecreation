@@ -8,7 +8,7 @@ export type RedeemAtPartnerResult =
   | { ok: false; reason: "invalid_code" }
   | { ok: false; reason: "none_ready" };
 
-const customLoopAccents = ["#A78BFA", "#38BDF8", "#F472B6", "#FB923C", "#2DD4BF"];
+const customLoopAccents = ["#8C7AA6", "#B2884F", "#A6708A", "#6B8F71", "#7A8CA6"];
 
 function makePassCode() {
   const rand = Math.random().toString(36).slice(2, 10).toUpperCase();

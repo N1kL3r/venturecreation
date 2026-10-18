@@ -263,7 +263,7 @@ export const loops: Loop[] = [
     id: "loop-grind",
     name: "Coffee, Sauna & Fitness",
     tagline: "5 Grünerløkka partners",
-    accent: "#FF5B3C",
+    accent: "#A6543C",
     linkIds: [
       "link-brew-sauna",
       "link-sauna-pulse",
@@ -276,7 +276,7 @@ export const loops: Loop[] = [
     id: "loop-style",
     name: "Flowers, Vinyl & Grooming",
     tagline: "4 Grünerløkka partners",
-    accent: "#C8FF4D",
+    accent: "#4F7858",
     linkIds: [
       "link-bloom-vinyl",
       "link-vinyl-barber",
@@ -288,7 +288,7 @@ export const loops: Loop[] = [
     id: "loop-mind",
     name: "Yoga, Food & Recovery",
     tagline: "3 Grünerløkka partners",
-    accent: "#8FB8FF",
+    accent: "#5C7A8A",
     linkIds: ["link-yoga-gronn", "link-gronn-massasje", "link-massasje-yoga"],
   },
 ];

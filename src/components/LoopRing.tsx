@@ -52,7 +52,7 @@ export function LoopRing({
             const p1 = point(start, R);
             const p2 = point(end, R);
             const state = linkStates[link.id]?.status ?? "progress";
-            const color = state === "redeemed" ? "var(--color-lime)" : loop.accent;
+            const color = state === "redeemed" ? "var(--color-ring-sage)" : loop.accent;
             return (
               <path
                 key={link.id}
@@ -89,7 +89,7 @@ export function LoopRing({
           const state = linkStates[link.id]?.status ?? "progress";
           const ring =
             state === "redeemed"
-              ? "ring-2 ring-[var(--color-lime)]"
+              ? "ring-2 ring-[var(--color-ring-sage)]"
               : "ring-1 ring-[var(--color-line)]";
           return (
             <button
