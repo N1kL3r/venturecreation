@@ -57,8 +57,8 @@ export function StampRing({
         />
       </svg>
       <div
-        className={`glass-tint absolute flex items-center justify-center rounded-full ${fillTone[status]}`}
-        style={{ inset: STROKE + 3 }}
+        className={`glass-tint flex items-center justify-center rounded-full ${fillTone[status]}`}
+        style={{ position: "absolute", inset: STROKE + 3 }}
       >
         <Icon name={status === "redeemed" ? "Check" : partnerIcon} size={size <= 48 ? 15 : 18} />
       </div>

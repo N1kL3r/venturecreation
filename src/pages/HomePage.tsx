@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { ChainRow } from "../components/ChainRow";
 import { ChainSheet } from "../components/ChainSheet";
 import { Icon } from "../components/IconTile";
-import { LoopChain } from "../components/LoopChain";
+import { LoopRing } from "../components/LoopRing";
 import { LoopSelector } from "../components/LoopSelector";
 import { useLoopData } from "../hooks/useLoopData";
 import { useAppStore } from "../store/useAppStore";
@@ -29,7 +29,7 @@ export function HomePage() {
 
       <div className="mt-2 flex items-start justify-between px-5">
         <div>
-          <p className="font-display text-[19px] font-semibold tracking-[-0.01em] text-[var(--color-ink)]">
+          <p className="font-display text-[22px] font-bold tracking-[-0.02em] text-[var(--color-ink)]">
             {loop.name}
           </p>
           <p className="text-[13px] text-[var(--color-muted)]">{loop.tagline}</p>
@@ -49,8 +49,8 @@ export function HomePage() {
         )}
       </div>
 
-      <div className="mt-5 px-5">
-        <LoopChain loopId={activeLoopId} onSelectLink={setOpenLinkId} />
+      <div className="mt-6">
+        <LoopRing loopId={activeLoopId} onSelectLink={setOpenLinkId} />
       </div>
 
       <div className="mb-3 mt-7 flex items-center justify-between px-5">
