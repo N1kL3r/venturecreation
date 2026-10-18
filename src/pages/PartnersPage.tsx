@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import { ChainSheet } from "../components/ChainSheet";
+import { CreateLoopSheet } from "../components/CreateLoopSheet";
 import { Icon, IconTile } from "../components/IconTile";
 import { PartnerSheet } from "../components/PartnerSheet";
 import { partners } from "../data/partners";
@@ -14,6 +15,7 @@ export function PartnersPage() {
   const [category, setCategory] = useState("All");
   const [partnerId, setPartnerId] = useState<string | null>(null);
   const [linkId, setLinkId] = useState<string | null>(null);
+  const [createOpen, setCreateOpen] = useState(false);
   const linkStates = useAppStore((s) => s.linkStates);
   const { linkById, partnerLinks, allLoops } = useLoopData();
 
@@ -75,6 +77,24 @@ export function PartnersPage() {
         })}
       </div>
 
+      <div className="mt-4 px-5">
+        <button
+          onClick={() => setCreateOpen(true)}
+          className="glass-tint flex w-full items-center gap-3 rounded-2xl border border-dashed border-[var(--color-line)] px-4 py-3.5 text-left"
+        >
+          <div className="glass-tint flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent-tint)] text-[var(--color-accent)]">
+            <Icon name="Plus" size={18} />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-[13px] font-semibold text-[var(--color-ink)]">Build your own loop</p>
+            <p className="text-[12px] text-[var(--color-muted)]">
+              Pick 3+ partners and set your own reward
+            </p>
+          </div>
+          <Icon name="ChevronRight" size={16} className="shrink-0 text-[var(--color-muted)]" />
+        </button>
+      </div>
+
       <div className="mt-4 grid grid-cols-2 gap-3 px-5">
         {filtered.map((p) => {
           const { earns, redeems } = partnerLinks(p.id);
@@ -119,6 +139,7 @@ export function PartnersPage() {
         }}
       />
       <ChainSheet link={openLink} onClose={() => setLinkId(null)} />
+      <CreateLoopSheet open={createOpen} onClose={() => setCreateOpen(false)} />
     </div>
   );
 }

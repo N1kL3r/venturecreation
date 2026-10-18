@@ -261,8 +261,8 @@ export const links: ChainLink[] = [
 export const loops: Loop[] = [
   {
     id: "loop-grind",
-    name: "The Grind Loop",
-    tagline: "Coffee, sweat, food, and thread",
+    name: "Coffee, Sauna & Fitness",
+    tagline: "5 Grünerløkka partners",
     accent: "#FF5B3C",
     linkIds: [
       "link-brew-sauna",
@@ -274,8 +274,8 @@ export const loops: Loop[] = [
   },
   {
     id: "loop-style",
-    name: "The Style Loop",
-    tagline: "Flowers, vinyl, grooming, and books",
+    name: "Flowers, Vinyl & Grooming",
+    tagline: "4 Grünerløkka partners",
     accent: "#C8FF4D",
     linkIds: [
       "link-bloom-vinyl",
@@ -286,8 +286,8 @@ export const loops: Loop[] = [
   },
   {
     id: "loop-mind",
-    name: "The Mind Loop",
-    tagline: "Movement, food, and recovery",
+    name: "Yoga, Food & Recovery",
+    tagline: "3 Grünerløkka partners",
     accent: "#8FB8FF",
     linkIds: ["link-yoga-gronn", "link-gronn-massasje", "link-massasje-yoga"],
   },
