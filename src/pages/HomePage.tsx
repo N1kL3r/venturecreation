@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { ChainRow } from "../components/ChainRow";
 import { ChainSheet } from "../components/ChainSheet";
 import { Icon } from "../components/IconTile";
-import { LoopDiagram } from "../components/LoopDiagram";
+import { LoopChain } from "../components/LoopChain";
 import { LoopSelector } from "../components/LoopSelector";
 import { useLoopData } from "../hooks/useLoopData";
 import { useAppStore } from "../store/useAppStore";
@@ -49,8 +49,8 @@ export function HomePage() {
         )}
       </div>
 
-      <div className="mt-5">
-        <LoopDiagram loopId={activeLoopId} onSelectLink={setOpenLinkId} />
+      <div className="mt-5 px-5">
+        <LoopChain loopId={activeLoopId} onSelectLink={setOpenLinkId} />
       </div>
 
       <div className="mb-3 mt-7 flex items-center justify-between px-5">

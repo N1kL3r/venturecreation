@@ -3,7 +3,7 @@ import { partnerById } from "../data/partners";
 import { useAppStore } from "../store/useAppStore";
 import type { ChainLink } from "../types";
 import { Icon, IconTile } from "./IconTile";
-import { ProgressIndicator } from "./Progress";
+import { StampRing, unitLabel } from "./Progress";
 
 export function ChainRow({
   link,
@@ -21,9 +21,6 @@ export function ChainRow({
   const from = partnerById(link.fromId);
   const to = partnerById(link.toId);
 
-  const statusTone =
-    state.status === "redeemed" ? "lime" : state.status === "ready" ? "accent" : "ink";
-
   return (
     <motion.button
       type="button"
@@ -32,20 +29,24 @@ export function ChainRow({
       transition={{ type: "spring", stiffness: 500, damping: 30 }}
       className="glass glass-sheen mb-3 flex w-full flex-col gap-3 rounded-[28px] p-4 text-left"
     >
-      <div className="flex items-start gap-3">
-        <IconTile name={from.icon} tone={statusTone === "ink" ? "ink" : statusTone} />
-        <div className="min-w-0 flex-1 pt-0.5">
+      <div className="flex items-center gap-3.5">
+        <StampRing
+          partnerIcon={from.icon}
+          current={state.current}
+          goal={link.goal}
+          status={state.status}
+        />
+        <div className="min-w-0 flex-1">
           <p className="truncate text-[15px] font-medium text-[var(--color-ink)]">
             {from.name}
           </p>
-          <p className="truncate text-[13px] text-[var(--color-muted)]">{link.earnLabel}</p>
-        </div>
-        <div className="self-center">
-          <ProgressIndicator current={state.current} goal={link.goal} unit={link.unit} />
+          <p className="truncate text-[13px] text-[var(--color-muted)]">
+            {state.status === "redeemed" ? link.earnLabel : unitLabel(link.unit, state.current, link.goal)}
+          </p>
         </div>
       </div>
 
-      <div className="flex items-start gap-3 pl-[18px]">
+      <div className="flex items-start gap-3 pl-[21px]">
         <div className="flex h-full w-9 shrink-0 justify-center">
           <div className="h-6 w-px border-l border-dashed border-[var(--color-accent)] opacity-60" />
         </div>
@@ -60,7 +61,7 @@ export function ChainRow({
         </div>
       </div>
 
-      <div className="flex items-center gap-3 pl-[18px]">
+      <div className="flex items-center gap-3 pl-[21px]">
         <div className="w-9 shrink-0" />
         <IconTile name={to.icon} tone="accent" size="sm" />
         <p className="text-[14px] font-semibold text-[var(--color-accent)]">{to.name}</p>
