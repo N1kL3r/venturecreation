@@ -1,3 +1,4 @@
+import { QRCodeSVG } from "qrcode.react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { partnerById, partners } from "../data/partners";
@@ -17,6 +18,7 @@ export function MerchantPage() {
   const [partnerId, setPartnerId] = useState(partners[0].id);
   const [code, setCode] = useState("");
   const [scannerOpen, setScannerOpen] = useState(false);
+  const [checkinOpen, setCheckinOpen] = useState(false);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const redeemAtPartner = useAppStore((s) => s.redeemAtPartner);
   const linkStates = useAppStore((s) => s.linkStates);
@@ -166,6 +168,33 @@ export function MerchantPage() {
             One pass per customer — we match whatever's ready at {partner.name} automatically.
           </p>
         </div>
+
+        <button
+          onClick={() => setCheckinOpen((v) => !v)}
+          className="glass mt-3 flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left"
+        >
+          <span className="flex items-center gap-2 text-[13px] font-medium text-[var(--color-ink-dim)]">
+            <Icon name="QrCode" size={15} />
+            Customer check-in code
+          </span>
+          <Icon
+            name="ChevronDown"
+            size={16}
+            className={`text-[var(--color-muted)] transition-transform ${checkinOpen ? "rotate-180" : ""}`}
+          />
+        </button>
+
+        {checkinOpen && (
+          <div className="glass glass-sheen mt-2 flex flex-col items-center gap-3 rounded-[26px] px-6 py-6 text-center">
+            <div className="rounded-xl bg-white p-2.5">
+              <QRCodeSVG value={`LIZLY-CHECKIN-${partnerId}`} size={120} />
+            </div>
+            <p className="text-[12px] leading-relaxed text-[var(--color-muted)]">
+              Show this on a counter screen — customers scan it in the app to log a stamp or
+              visit at {partner.name}.
+            </p>
+          </div>
+        )}
 
         {feedback && (
           <div

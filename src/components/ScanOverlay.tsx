@@ -1,9 +1,9 @@
+import jsQR from "jsqr";
 import { AnimatePresence, motion } from "framer-motion";
-import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useRef, useState } from "react";
 import { Icon } from "./IconTile";
 
-type Phase = "scanning" | "detected";
+type Status = "requesting" | "scanning" | "matched" | "denied" | "unsupported";
 
 export function ScanOverlay({
   open,
@@ -18,22 +18,83 @@ export function ScanOverlay({
   onDetected: () => void;
   onClose: () => void;
 }) {
-  const [phase, setPhase] = useState<Phase>("scanning");
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const rafRef = useRef<number>(0);
   const onDetectedRef = useRef(onDetected);
   onDetectedRef.current = onDetected;
+  const [status, setStatus] = useState<Status>("requesting");
 
   useEffect(() => {
     if (!open) return;
-    setPhase("scanning");
-    const detect = setTimeout(() => setPhase("detected"), 1700 + Math.random() * 500);
-    return () => clearTimeout(detect);
-  }, [open]);
+    let cancelled = false;
+    setStatus("requesting");
+
+    async function start() {
+      if (!navigator.mediaDevices?.getUserMedia) {
+        setStatus("unsupported");
+        return;
+      }
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: { ideal: "environment" } },
+          audio: false,
+        });
+        if (cancelled) {
+          stream.getTracks().forEach((t) => t.stop());
+          return;
+        }
+        streamRef.current = stream;
+        const video = videoRef.current;
+        if (video) {
+          video.srcObject = stream;
+          await video.play();
+        }
+        setStatus("scanning");
+        tick();
+      } catch {
+        if (!cancelled) setStatus("denied");
+      }
+    }
+
+    function tick() {
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      if (video && canvas && video.readyState === video.HAVE_ENOUGH_DATA) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+          const frame = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const code = jsQR(frame.data, frame.width, frame.height, {
+            inversionAttempts: "dontInvert",
+          });
+          if (code?.data === `LIZLY-CHECKIN-${partnerId}`) {
+            setStatus("matched");
+            return;
+          }
+        }
+      }
+      rafRef.current = requestAnimationFrame(tick);
+    }
+
+    start();
+
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(rafRef.current);
+      streamRef.current?.getTracks().forEach((t) => t.stop());
+      streamRef.current = null;
+    };
+  }, [open, partnerId]);
 
   useEffect(() => {
-    if (phase !== "detected") return;
-    const close = setTimeout(() => onDetectedRef.current(), 700);
-    return () => clearTimeout(close);
-  }, [phase]);
+    if (status !== "matched") return;
+    const t = setTimeout(() => onDetectedRef.current(), 700);
+    return () => clearTimeout(t);
+  }, [status]);
 
   return (
     <AnimatePresence>
@@ -44,14 +105,6 @@ export function ScanOverlay({
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-[70] mx-auto flex max-w-[30rem] flex-col bg-[#050408]"
         >
-          <div
-            className="pointer-events-none absolute inset-0 opacity-70"
-            style={{
-              background:
-                "radial-gradient(circle at 50% 38%, rgba(60,56,72,0.55), transparent 60%), radial-gradient(circle at 20% 80%, rgba(255,91,60,0.1), transparent 55%)",
-            }}
-          />
-
           <div className="relative z-10 flex items-center justify-between px-5 pt-[max(1.25rem,env(safe-area-inset-top))]">
             <div>
               <p className="text-[15px] font-semibold text-white">Check in at {partnerName}</p>
@@ -66,54 +119,71 @@ export function ScanOverlay({
             </button>
           </div>
 
-          <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-10">
-            <div className="relative h-72 w-72">
-              {["-top-1 -left-1 border-r-0 border-b-0", "-top-1 -right-1 border-l-0 border-b-0", "-bottom-1 -left-1 border-r-0 border-t-0", "-bottom-1 -right-1 border-l-0 border-t-0"].map(
-                (pos, i) => (
-                  <span
-                    key={i}
-                    className={`absolute ${pos} h-10 w-10 rounded-[6px] border-[3px] transition-colors duration-300 ${
-                      phase === "detected" ? "border-[var(--color-lime)]" : "border-[var(--color-accent)]"
-                    }`}
-                  />
-                )
-              )}
+          <div className="relative flex flex-1 items-center justify-center overflow-hidden">
+            <video ref={videoRef} playsInline muted className="absolute inset-0 h-full w-full object-cover" />
+            <canvas ref={canvasRef} className="hidden" />
+            <div className="pointer-events-none absolute inset-0 bg-black/25" />
 
-              <div className="absolute inset-4 flex items-center justify-center overflow-hidden rounded-2xl">
-                <QRCodeSVG
-                  value={`LIZLY-CHECKIN-${partnerId}`}
-                  size={132}
-                  fgColor="#55505f"
-                  bgColor="transparent"
-                  className="opacity-40"
-                />
-
-                {phase === "scanning" && (
-                  <motion.div
-                    initial={{ y: -110 }}
-                    animate={{ y: 110 }}
-                    transition={{ duration: 1.3, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
-                    className="absolute left-2 right-2 h-[2px] rounded-full bg-[var(--color-accent)]"
-                    style={{ boxShadow: "0 0 12px 2px rgba(255,91,60,0.7)" }}
-                  />
+            {(status === "scanning" || status === "matched") && (
+              <div className="relative z-10 h-72 w-72">
+                {["-top-1 -left-1 border-r-0 border-b-0", "-top-1 -right-1 border-l-0 border-b-0", "-bottom-1 -left-1 border-r-0 border-t-0", "-bottom-1 -right-1 border-l-0 border-t-0"].map(
+                  (pos, i) => (
+                    <span
+                      key={i}
+                      className={`absolute ${pos} h-10 w-10 rounded-[6px] border-[3px] transition-colors duration-300 ${
+                        status === "matched" ? "border-[var(--color-lime)]" : "border-[var(--color-accent)]"
+                      }`}
+                    />
+                  )
                 )}
 
                 <AnimatePresence>
-                  {phase === "detected" && (
+                  {status === "matched" && (
                     <motion.div
                       initial={{ scale: 0.6, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
-                      className="glass-strong absolute flex h-20 w-20 items-center justify-center rounded-full"
+                      className="glass-strong absolute inset-0 m-auto flex h-20 w-20 items-center justify-center rounded-full"
                     >
                       <Icon name="CheckCircle2" size={38} className="text-[var(--color-lime)]" />
                     </motion.div>
                   )}
                 </AnimatePresence>
               </div>
-            </div>
+            )}
 
-            <p className="mt-8 text-[13px] font-medium text-white/60">
-              {phase === "scanning" ? "Scanning…" : "Checked in!"}
+            {(status === "requesting" || status === "denied" || status === "unsupported") && (
+              <div className="glass-strong relative z-10 mx-8 flex flex-col items-center gap-2 rounded-[28px] p-6 text-center">
+                {status === "requesting" && (
+                  <>
+                    <Icon name="Camera" size={26} className="text-white" />
+                    <p className="text-sm font-medium text-white">Requesting camera access…</p>
+                  </>
+                )}
+                {status === "denied" && (
+                  <>
+                    <Icon name="CameraOff" size={26} className="text-[var(--color-accent)]" />
+                    <p className="text-sm font-medium text-white">Camera access denied</p>
+                    <p className="text-xs text-white/60">
+                      Allow camera access in your browser, or check in manually.
+                    </p>
+                  </>
+                )}
+                {status === "unsupported" && (
+                  <>
+                    <Icon name="CameraOff" size={26} className="text-[var(--color-accent)]" />
+                    <p className="text-sm font-medium text-white">Camera not available</p>
+                    <p className="text-xs text-white/60">Check in manually instead.</p>
+                  </>
+                )}
+              </div>
+            )}
+
+            <p className="absolute bottom-6 z-10 text-[13px] font-medium text-white/60">
+              {status === "scanning"
+                ? "Scanning…"
+                : status === "matched"
+                  ? "Checked in!"
+                  : ""}
             </p>
           </div>
 
