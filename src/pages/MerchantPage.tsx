@@ -187,7 +187,7 @@ export function MerchantPage() {
         {checkinOpen && (
           <div className="glass glass-sheen mt-2 flex flex-col items-center gap-3 rounded-[26px] px-6 py-6 text-center">
             <div className="rounded-xl bg-white p-2.5">
-              <QRCodeSVG value={`LIZLY-CHECKIN-${partnerId}`} size={120} />
+              <QRCodeSVG value={`LIZLY-CHECKIN-${partnerId}`} size={160} level="M" marginSize={4} />
             </div>
             <p className="text-[12px] leading-relaxed text-[var(--color-muted)]">
               Show this on a counter screen — customers scan it in the app to log a stamp or

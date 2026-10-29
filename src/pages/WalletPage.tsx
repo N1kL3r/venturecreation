@@ -36,7 +36,7 @@ export function WalletPage() {
             Your Lizly Pass
           </span>
           <div className="rounded-2xl bg-white p-3">
-            <QRCodeSVG value={passCode} size={168} />
+            <QRCodeSVG value={passCode} size={188} level="M" marginSize={4} />
           </div>
           <span className="font-mono text-[13px] tracking-wider text-[var(--color-ink-dim)]">
             {passCode}

@@ -108,7 +108,7 @@ export const useAppStore = create<AppState>()(
 
       redeemAtPartner: (code, partnerId) => {
         const s = get();
-        if (code.trim().toUpperCase() !== s.passCode) {
+        if (!/^LIZLY-PASS-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(code.trim().toUpperCase())) {
           return { ok: false, reason: "invalid_code" };
         }
 

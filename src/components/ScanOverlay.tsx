@@ -5,6 +5,8 @@ import { Icon } from "./IconTile";
 
 type Status = "requesting" | "scanning" | "matched" | "denied" | "unsupported";
 
+const MAX_SCAN_WIDTH = 640;
+
 export function ScanOverlay({
   open,
   partnerName,
@@ -38,7 +40,11 @@ export function ScanOverlay({
       }
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: { ideal: "environment" } },
+          video: {
+            facingMode: { ideal: "environment" },
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+          },
           audio: false,
         });
         if (cancelled) {
@@ -62,9 +68,10 @@ export function ScanOverlay({
       const video = videoRef.current;
       const canvas = canvasRef.current;
       if (video && canvas && video.readyState === video.HAVE_ENOUGH_DATA) {
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        const ctx = canvas.getContext("2d");
+        const scale = Math.min(1, MAX_SCAN_WIDTH / video.videoWidth);
+        canvas.width = Math.round(video.videoWidth * scale);
+        canvas.height = Math.round(video.videoHeight * scale);
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
         if (ctx) {
           ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
           const frame = ctx.getImageData(0, 0, canvas.width, canvas.height);
